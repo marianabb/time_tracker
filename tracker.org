@@ -1,0 +1,71 @@
+#+TITLE: Detection and Quantification of Small Changes in MRI Volumes -- Time Tracker
+#+AUTHOR: Mariana Bustamante
+
+* DONE Meeting with Robin:
+   CLOSED: [2012-02-20 Mon 11:16]
+   - Fiducials / ACPC
+   - ROIs, remove parts
+   - Skullstripping
+     
+   - Which methods allow ROIs? and [[*Skullstripping][skullstripping]]
+     
+* TODO [#A] Check stuff from the meeting: Which methods allow the following..
+   SCHEDULED: <2012-02-24 Fri>
+** TODO Fiducials / ACPC
+   - Registration > Fiducial Registration :: computes a linear transform from two lists of fiducials. The transform can either be translation only, rigid transform, or 
+     similarity transform.
+   - Registration > ACPC Transform :: The resulting transform will bring the line connecting AC and PC to a line horizontal to the AP axis.
+** TODO ROIs, remove parts
+   - Wizards > ChangeTracker :: allows marking of zones to be analyzed and it finds differences. [[ChangeTracker][But is special for tumors]].
+** TODO Skullstripping
+* DONE HelloPython Slicer tutorial
+  CLOSED: [2012-02-21 Tue 16:24]
+  - [[http://www.slicer.org/slicerWiki/images/3/3c/ProgrammingIntoSlicer3.6.1_HelloPython_MICCAI2010_SoniaPujol.pdf][Link to the tutorial]]
+  - Works in Slicer 3 ONLY. Terrible + messy documentation!!
+  - Tried unsuccesfully to modify the script to do everything automatic. I guess I need more working examples.
+    
+* DONE Tutorial on quantitative imaging
+  CLOSED: [2012-02-22 Wed 16:19]
+1. [[http://www.slicer.org/slicerWiki/images/c/c6/Slicer4QuantitativeImaging.pdf][Link to the tutorial]]   
+2. Important part begins on slide 56 (exploring volumetric changes)
+3. <<<ChangeTracker>>> Module --> [[http://wiki.slicer.org/slicerWiki/index.php/Documentation/4.0/Modules/ChangeTracker][Slicer4 module page]] [[http://wiki.slicer.org/slicerWiki/index.php/Modules:ChangeTracker-Documentation-3.6][Slicer3 module page]]
+   + Main goal is tumor changes.
+   + Assumes (among other things): the pathology area is caharacterized by bright image intensities (contrast-enhanced meningioma MRI).
+   + Change can be detected by analyzing intensity pattern (fast) or deformation map (slow).
+   + It is not perfect, some times fails, some times crashes.
+   + It allows registering the data with my own transformation (obtained before) instead of using the default one which is Rigid registration.
+   + It also allows skipping the registration step altogether.
+
+** TODO Check ChangeTracker module in depth
+*** DONE How slow/good is the slow option? (deformation map)
+    CLOSED: [2012-02-22 Wed 16:21]
+    - It's not an option in Slicer4, only in Slicer3. I don't know why it's mentioned in the tutorial, probably the Slicer4 version is not done.
+    - More quantification metrics can be added manually.
+      
+*** TODO Check ChangeTracker source code
+*** DONE Does it exist for Slicer3?
+    CLOSED: [2012-02-23 Thu 13:59]
+    Yes, actually the documentation is better and the module seems more complete.
+
+*** DONE Find a way to use the slow option (deformation map)
+    CLOSED: [2012-02-23 Thu 14:13]
+    Solution: Use Slicer3
+*** TODO Read the paper about metrics to quantify tumor progression
+[[http://www.spl.harvard.edu/publications/item/view/1430][- Link to the paper]]
+- 
+
+* TODO Read more about developing for Slicer
+** TODO Read more documentation on new modules/extensions
+** TODO Find more examples
+
+* TODO Update repository and organize documents
+** DONE New repository for papers
+   CLOSED: [2012-02-22 Wed 11:22]
+   It's in Github, named thesis_papers
+
+** TODO How to add all TODOs to the agenda (Regexp)
+** TODO Can I use my public_html page?
+* TODO [#C] Learn more orgmode
+
+
+* TODO Read the paper: Automatic detection and segmentation of evolving processes in 3D medical Images: Application to multiple sclerosis.
