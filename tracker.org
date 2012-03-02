@@ -77,9 +77,31 @@
 - The end user won't notice a difference as they all share the look & feel. The choice for a given type of module is usually based 
   on the type of inputs/parameters for a given module.
 *** Command Line Interface (CLI)
+- Standalone executables with a limited input/output arguments complexity (simple argument types, no user interactions). 
+- They are typically implemented using ITK. 
+- The recommended way to write your own CLI is to copy an existing module.
+- GUI automatically generated.
+
+
+- Require a module.xml and a module.so or module.py
+- Can't update the 3D visualization or Slicer viewers while executing.
+- Can't accept or request input while running.
 
 *** Loadable Modules
+- C++ plugins that are built against Slicer. They define custom GUIs for their specific behavior as they have full control over the application.
+- Full control over the GUI (Qt) and Slicer internals (MRML, logics, display managers...).
+- Optimized for heavy computations.
+
+
+- Change tracker is a loadable module.
+- In theory you can create your own using ModuleWizard.py but I can't find this file.
+**** TODO Is it in the nightly build version? Maybe must compile Slicer from scratch? This is annoying...
+
 *** Scripted Modules
+- Written in Python and typically but not necessarily use the high level API of Slicer and toolkits.
+- Full access to the API: VTK, ITK, MRML, Qt and Slicer are fully wrapped.
+- Recommended for fast prototyping.
+
 
 
 ** TODO Read more documentation on new modules/extensions
