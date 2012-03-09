@@ -4,6 +4,17 @@
 
 
 * Meetings
+** Meeting with Anders 09-2:
+- I showed him the time plan. He agrees with it.
+- We will not focus on implementing a registration method, we will use already available methods. Possibly letting the user choose which method to use, after we have already filtered the worse ones.
+- We will focus on the part about detecting small changes (possibly showing them in the interface) and quantifying them.
+- Anders believes that it would be good if the final product is a 3DSlicer module instead of an independent application. Because a module can be reused and we would also be able to make it public and receive comments and reviews from people who work in the area. It depends on whether we have all the tools that we need available in 3DSlicer.
+
+- Specifically about 3D Slicer:
+  + "View" -> "Python interactor" in 3DSlicer allows us to use the python command line directly inside 3DSlicer and access all variables and methods. This is awesome!
+  + This means that we'll probably be able to substract volumes and do most of the things we can do in MatLab in 3DSlicer (hopefully, it remains to be proven).
+- OpenCV could also be useful, can be used from Python but not necessarily from 3DSlicer.
+- Probably useful book: Programming Computer Vision with Python -> http://www.maths.lth.se/matematiklth/personal/solem/book.html
 
 ** DONE Meeting with Robin 20-2:
    CLOSED: [2012-02-20 Mon 11:16]
@@ -15,22 +26,33 @@
 
 ** No meeting on 27-2 - I was sick
 
-**  DONE Meeting with Robin 5-3:
+** DONE Meeting with Robin 05-3:
   CLOSED: [2012-03-05 Mon 11:12]
 - Continue reading Slicer documentation
 - [ ] Goal for the week: Create a module, not necesarily very functional.
 - [ ] Next week we must agree on what functions and methods to use according to the papers read.
 
 
-* Papers
-** DONE Read the paper: Automatic detection and segmentation of evolving processes in 3D medical Images: Application to multiple sclerosis.
+* Papers and readings
+** Registration lecture notes
+[[file:../thesis_papers/registration_class_notes.org][Notes on the lecture]]
+
+
+** Paper: Image registration methods: A survey
+[[file:../thesis_papers/image_registration_methods_a_survey.org][Summary]]
+** Paper: Quantitative comparison of algorithms for intersubject registration
+[[file:../thesis_papers/quantitative_comparison_of_algorithms_for_intersubject_registration.org][Summary]]
+
+** Paper: A review of the automated detection of change in serial imaging studies of the brain
+[[file:../thesis_papers/a_review_of_the_automated_detection_of_chage_in_serial_imaging_studies_of_the_brain.org][Summary]]
+
+** DONE Paper: Automatic detection and segmentation of evolving processes in 3D medical Images: Application to multiple sclerosis.
                     CLOSED: [2012-02-28 Tue 16:40]
-- [[file:../thesis\_papers/automatic_detection_and_segmentation_of_evolving_processes.org][Summary]]
-** DONE Read the paper about quantifying metrics for tumor progression.
+- [[file:../thesis_papers/automatic_detection_and_segmentation_of_evolving_processes.org][Summary]]
+** DONE Paper about quantifying metrics for tumor progression.
    CLOSED: [2012-02-27 Mon 15:41]
 [[quantify tumor progression][All about it in the Change Tracker section]]
 
-** TODO Add the papers read before using org-mode
 
 * Slicer
 ** DONE Which methods allow the following:
@@ -68,43 +90,124 @@
 
 
 ** TODO Read more about developing for Slicer
-*** TODO Read [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Modules][This]] about Slicer Modules
-- Slicer4 supports 3 types of modules:
+*** DONE Read [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Modules][This]] about the types of Slicer Modules
+    CLOSED: [2012-03-06 Thu 11:47]
+ Slicer4 supports 3 types of modules:
   1. Command Line Interface (CLI)
   2. Loadable Modules
   3. Scripted Modules
 - The end user won't notice a difference as they all share the look & feel. The choice for a given type of module is usually based 
   on the type of inputs/parameters for a given module.
 **** Command Line Interface (CLI)
+- In theory this is the simplest mechanism to contribute an algorithm to Slicer.
 - Standalone executables with a limited input/output arguments complexity (simple argument types, no user interactions). 
 - They are typically implemented using ITK. 
 - The recommended way to write your own CLI is to copy an existing module.
 - GUI automatically generated.
 
 
-- Require a module.xml and a module.so or module.py
+- Require a module.xml that produces a user interface and a module.cxx or module.py. One directory with everything.
 - Can't update the 3D visualization or Slicer viewers while executing.
 - Can't accept or request input while running.
+- Restricted access to Slicer internals.
 
 **** Loadable Modules
 - C++ plugins that are built against Slicer. They define custom GUIs for their specific behavior as they have full control over the application.
 - Full control over the GUI (Qt) and Slicer internals (MRML, logics, display managers...).
 - Optimized for heavy computations.
 
-
 - Change tracker is a loadable module.
 - In theory you can create your own using ModuleWizard.py but I can't find this file.
-***** TODO Is it in the nightly build version? Maybe must compile Slicer from scratch? This is annoying...
-
+***** DONE Is it in the nightly build version? Maybe must compile Slicer from scratch? This is annoying!
+      CLOSED: [2012-03-06 Tue 11:03]
+- No it's not, the nightly build is also compiled (hence the 'build', duh). To develop on it, Slicer must be compiled on the computer. Must download version from repository.
+- Next Step: [[Compiling Slicer][compiling]].
 **** Scripted Modules
 - Written in Python and typically but not necessarily use the high level API of Slicer and toolkits.
 - Full access to the API: VTK, ITK, MRML, Qt and Slicer are fully wrapped.
 - Recommended for fast prototyping.
+- Limited access to Slicer internals.
 
 *** TODO Read more documentation on new modules/extensions
 *** TODO Find more examples
 
 
+** DONE Compiling Slicer4 from source
+   CLOSED: [2012-03-09 Fri 14:09]
+- I used [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Build_Instructions][this]] intructions.
+- git-svn is not installed on my machine. I requested it from Olle.
+- Later I would like to fork Slicer4 into my github. Here are [[http://www.slicer.org/slicerWiki/index.php/Slicer:git-svn][the instructions]].
+- During configuring, they say the command is:
+#+BEGIN_SRC sh
+ccmake ../Slicer4
+#+END_SRC
+but what works (obviously) is
+#+BEGIN_SRC sh
+ccmake ../
+#+END_SRC
+- I need to fill a few [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Build_Instructions/Prerequisites][prerequisites]]. Everything is there except for Qt 4.6.3 (I have 4.6.2).
+*** DONE Install Qt locally
+    CLOSED: [2012-03-07 Wed 11:05]
+- Installing Qt, even from a binary, is VERY slow...
+
+- Installed Qt 4.8.0 in
+#+BEGIN_SRC sh
+~/thesis_apps/QtSDK/Desktop/Qt/4.8.0/gcc/bin
+#+END_SRC
+
+- Compilation error with PythonQt. Wrote to the mailing list.
+*** DONE Install Qt 4.7.4
+    CLOSED: [2012-03-08 Thu 15:37]
+- The binary was not easy to find AT ALL!
+- It was actually 4.7.0, but it worked
+*** DONE Attempt compilation again
+    CLOSED: [2012-03-09 Fri 13:37]
+
+- Installed Qt 4.7.0 in (the working one!)
+#+BEGIN_SRC sh
+~/thesis_apps/qtsdk-2010.05/qt/bin
+#+END_SRC
+
+- Commands to compile:
+  1. Create the project Slicer4-Superbuild that manages all the external dependencies of Slicer (VTK, ITK, Python, ...) with:
+#+BEGIN_SRC sh
+     mkdir Slicer4-SuperBuild
+     cd Slicer4-SuperBuild
+     ccmake -DQT_QMAKE_EXECUTABLE:FILEPATH=~/thesis_apps/qtsdk-2010.05/qt/bin/qmake ../
+#+END_SRC
+  2. Create the second project in Slicer4-Superbuild/Slicer-build: the "traditional" build directory of Slicer, by running inside Slicer4-Superbuild:
+#+BEGIN_SRC sh 
+        make -j <Number of cores>
+#+END_SRC
+  3. Be patient. It takes forever the first time. Forever, seriously.
+
+- Run Slicer:
+#+BEGIN_SRC sh 
+  Slicer4-SuperBuild/Slicer-build/Slicer
+#+END_SRC
+
+- It works! :)
+
+** TODO Write a simple testing module
+*** TODO Which type of modules should I try?
+The best options available for module prototypes are:
+- [ ] Command Line Interface: Lots of info [[http://www.slicer.org/slicerWiki/index.php/Slicer3:Execution_Model_Documentation][here]] (for Slicer3, but it's supposed to be very similar).
+- [ ] Scripted Module: Doesn't need compiling. Have limited access to Slicer internals. Can run CLI from Python, how to do this [[http://www.slicer.org/slicerWiki/index.php/Slicer4:Python][here]].
+- [ ] External Module: Loadable module that is compiles outside the slicer build tree. [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Tutorials/ExternalModuleWriting][Tutorial]].
+- [ ] Regular Loadable Module: In C++. Compiles with Slicer. [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Tutorials/ModuleWriting][Tutorial]].
+*** TODO Write a CLI
+*** TODO Write a scripted module
+**** TODO How to see it from the UI?
+*** TODO Write an external module
+*** TODO Write a loadable module
+
+** Interesting details about Slicer
+- Application settings (including the search path for modules/extensions) are stored in a .ini file. The location of the file depends on the OS:
+  + Linux + Mac OS X: ~/.config/www.na-mic.org/Slicer.ini
+  + Windows: C:\Users\USERNAME\AppData\Roaming\NA-MIC\Slicer.ini
+- Useful [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Tutorials/Troubleshooting][link]] with advice on handling memory leaks and crashes.
+
+    
 * ChangeTracker Module
 ** DONE How slow/good is the slow option? (deformation map)
     CLOSED: [2012-02-22 Wed 16:21]
@@ -145,5 +248,6 @@ Here is the [[http://www.fmrib.ox.ac.uk/fslcourse/][Link]]
 ** DONE Can I use my public\_html page?
    CLOSED: [2012-03-01 Thu 19:02]
 Yes, yes I can. [[http://cb.uu.se/~mariana][Here]].
-** TODO Fix all the links, specially the papers.
+** DONE Fix all the links, specially the papers.
+   CLOSED: [2012-03-05 Mon 13:55]
 ** TODO There is always more to learn about org mode!
