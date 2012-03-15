@@ -117,7 +117,7 @@
 - Optimized for heavy computations.
 
 - Change tracker is a loadable module.
-- In theory you can create your own using ModuleWizard.py but I can't find this file.
+- Can create your own using ModuleWizard.py.
 ***** DONE Is it in the nightly build version? Maybe must compile Slicer from scratch? This is annoying!
       CLOSED: [2012-03-06 Tue 11:03]
 - No it's not, the nightly build is also compiled (hence the 'build', duh). To develop on it, Slicer must be compiled on the computer. Must download version from repository.
@@ -195,9 +195,59 @@ The best options available for module prototypes are:
 - [ ] Scripted Module: Doesn't need compiling. Have limited access to Slicer internals. Can run CLI from Python, how to do this [[http://www.slicer.org/slicerWiki/index.php/Slicer4:Python][here]].
 - [ ] External Module: Loadable module that is compiles outside the slicer build tree. [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Tutorials/ExternalModuleWriting][Tutorial]].
 - [ ] Regular Loadable Module: In C++. Compiles with Slicer. [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Tutorials/ModuleWriting][Tutorial]].
-*** TODO Write a CLI
 *** TODO Write a scripted module
+- Here is the [[file:../slicer_tutorials/first_modules/scripted_module.py][script]].
+- The file that they open as a volume in the example is a .nrrd, this could be a data file of any type, it just follows some rules.
+- The symbol "~" doesn't work on paths.
+- This works for loading a volume ONLY in the compiled version, not in the binary (I don't know why):
+#+BEGIN_SRC python
+  slicer.util.loadVolume("/home/mariana/thesis/volumes/first_batch/patient1-us1/test.dcm")
+  n = getNode('test')
+#+END_SRC
+- Weird: the effect of the called CLI takes an unlimited amount of time to show up on the UI. I believe it executes fast but the model is not refreshed on screen.
+**** TODO How to force a refresh on the UI? 
+- To access a list of CLIs:
+#+BEGIN_SRC python
+  parameters = {}
+  parameters["ParameterName"] = volumeNode.GetID()
+  CLI_module = slicer.modules.CLI_name
+#+END_SRC
+- To execute a CLI:
+#+BEGIN_SRC python
+  slicer.cli.run(CLI_module, None, parameters)
+#+END_SRC
+- Installed the VTK package in the Python tree.
+- Installed ipython and matplotlib as explained in the tutorial.
+**** DONE How to launch term in order to run ipython?
+     CLOSED: [2012-03-15 Thu 17:55]
+     1. Launch xterm through Slicer:
+#+BEGIN_SRC sh
+        ./Slicer-build/Slicer --xterm
+#+END_SRC
+     2. Launch ipython from inside xterm:
+#+BEGIN_SRC sh
+        ../python-build/bin/ipython
+#+END_SRC
+***** TODO ipython works, but the command 'import slicer' causes segmentation fault. Fix? 
+
+- Slicer can be run as:
+#+BEGIN_SRC sh
+  ./Slicer --python-script <python script to execute after Slicer loads>
+  ./Slicer --python-code <python code to execute after Slicer loads>
+#+END_SRC
+Now, what is the difference between "python script" and "python code"?
+
+**** DONE Can a function be added on the console?
+     CLOSED: [2012-03-15 Thu 15:52]
+Yes, can't use middle-click. Must use right-click+paste or ctrl-c + ctrl-v. This sucks!
+
 **** TODO How to see it from the UI?
+I think it might not be possible.
+
+**** TODO Try to call a registration method as a CLI from a script.
+
+
+*** TODO Write a CLI
 *** TODO Write an external module
 *** TODO Write a loadable module
 
