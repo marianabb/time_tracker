@@ -189,23 +189,22 @@ ccmake ../
 - It works! :)
 
 ** TODO Write a simple testing module
-*** TODO Which type of modules should I try?
+*** Which type of modules should I try?
 The best options available for module prototypes are:
 - [ ] Command Line Interface: Lots of info [[http://www.slicer.org/slicerWiki/index.php/Slicer3:Execution_Model_Documentation][here]] (for Slicer3, but it's supposed to be very similar).
-- [ ] Scripted Module: Doesn't need compiling. Have limited access to Slicer internals. Can run CLI from Python, how to do this [[http://www.slicer.org/slicerWiki/index.php/Slicer4:Python][here]].
+- [X] Scripted Module: Doesn't need compiling. Have limited access to Slicer internals. Can run CLI from Python, how to do this [[http://www.slicer.org/slicerWiki/index.php/Slicer4:Python][here]].
 - [ ] External Module: Loadable module that is compiles outside the slicer build tree. [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Tutorials/ExternalModuleWriting][Tutorial]].
 - [ ] Regular Loadable Module: In C++. Compiles with Slicer. [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Tutorials/ModuleWriting][Tutorial]].
 *** TODO Write a scripted module
-- Here is the [[file:../slicer_tutorials/first_modules/scripted_module.py][script]].
+- Here are some initial testing [[file:../slicer_tutorials/first_modules/scripted_module.py][scripts]].
 - The file that they open as a volume in the example is a .nrrd, this could be a data file of any type, it just follows some rules.
 - The symbol "~" doesn't work on paths.
-- This works for loading a volume ONLY in the compiled version, not in the binary (I don't know why):
+- The commands for loading a volume work ONLY in the compiled version, not in the binary (I don't know why):
 #+BEGIN_SRC python
   slicer.util.loadVolume("/home/mariana/thesis/volumes/first_batch/patient1-us1/test.dcm")
   n = getNode('test')
 #+END_SRC
-- Weird: the effect of the called CLI takes an unlimited amount of time to show up on the UI. I believe it executes fast but the model is not refreshed on screen.
-**** TODO How to force a refresh on the UI? 
+- The effect of the called CLI takes an unlimited amount of time to show up on the UI. I believe it executes fast but the model is not refreshed on screen. See [[force a refresh][here]].
 - To access a list of CLIs:
 #+BEGIN_SRC python
   parameters = {}
@@ -228,32 +227,55 @@ The best options available for module prototypes are:
 #+BEGIN_SRC sh
         ../python-build/bin/ipython
 #+END_SRC
-***** TODO ipython works, but the command 'import slicer' causes segmentation fault. Fix? 
-
 - Slicer can be run as:
 #+BEGIN_SRC sh
   ./Slicer --python-script <python script to execute after Slicer loads>
   ./Slicer --python-code <python code to execute after Slicer loads>
 #+END_SRC
 Now, what is the difference between "python script" and "python code"?
+- Can use matplotlib to plot things. 
+- Slicer/Libs/qMRMLWidgets: MRML-aware widgets
 
+***** TODO ipython works, but the command 'import slicer' causes segmentation fault. Fix? 
 **** DONE Can a function be added on the console?
      CLOSED: [2012-03-15 Thu 15:52]
 Yes, can't use middle-click. Must use right-click+paste or ctrl-c + ctrl-v. This sucks!
 
-**** TODO How to see it from the UI?
-I think it might not be possible.
+**** DONE How to see it from the UI?
+     CLOSED: [2012-03-16 Fri 14:47]
+Add the path to the module in "Additional module paths" on Slicer settings. It will load it automatically.
+
+**** DONE How to force a refresh on the UI? 
+     CLOSED: [2012-03-16 Fri 13:53]
+In the video tutorial there are two commands that produce innmediate results in the UI:
+#+BEGIN_SRC python
+n = getNode('MRHead1')
+d = n.GetDisplayNode()
+d.SetApplyThreshold(0) # This
+
+i = n.GetImageData()
+import vtk.util.numpy_support
+a = vtk.util.numpy_support.vtk_to_numpy(i.GetPointData().GetScalars())
+a[:] = -a
+i.Modified() # And this!
+#+END_SRC
 
 **** TODO Try to call a registration method as a CLI from a script.
-
-
+- March 16th almost working. The registration is called but need to handle the result properly.
+***** TODO create a repository
+     
+**** DONE Make a useful UI on the module
+     CLOSED: [2012-03-16 Fri 18:36]
+- The button "GrayModel" on my new module calls the CLI Gray Scale Model Maker.
+- Added button "Register" also. 
+- Need more experimenting and examples. Mostly examples.
+  
 *** TODO Write a CLI
 *** TODO Write an external module
 *** TODO Write a loadable module
-
 ** Interesting details about Slicer
 - Application settings (including the search path for modules/extensions) are stored in a .ini file. The location of the file depends on the OS:
-  + Linux + Mac OS X: ~/.config/www.na-mic.org/Slicer.ini
+  + Linux + Mac OS X: ~/.config/www.na-mic.org/Slicer.ini or ~/.config/NA-MIC/Slicer.ini
   + Windows: C:\Users\USERNAME\AppData\Roaming\NA-MIC\Slicer.ini
 - Useful [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Tutorials/Troubleshooting][link]] with advice on handling memory leaks and crashes.
 
