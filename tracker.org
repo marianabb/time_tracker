@@ -25,13 +25,19 @@
 - Which methods allow ROIs? and [[*Skullstripping][skullstripping]]
 
 ** No meeting on 27-2 - I was sick
-
 ** DONE Meeting with Robin 05-3:
   CLOSED: [2012-03-05 Mon 11:12]
 - Continue reading Slicer documentation
 - [ ] Goal for the week: Create a module, not necesarily very functional.
 - [ ] Next week we must agree on what functions and methods to use according to the papers read.
-
+** No meeting on 12-3 - I was sick again
+** Meeting with Robin 15-3 (Thursday):
+- Progress on compilation.
+- Started to write a new module, still unsure about which module type is best.
+** DONE Meeting with Robin 19-3:
+   CLOSED: [2012-03-19 Mon 11:49]
+- Showed him the first prototype of the new module. It is a Python scripted module.
+- Seems to have potential, but I need more time with it.
 
 * Papers and readings
 ** Registration lecture notes
@@ -88,8 +94,9 @@
    + It allows registering the data with my own transformation (obtained before) instead of using the default one which is Rigid registration.
    + It also allows skipping the registration step altogether.
 
-
-** TODO Read more about developing for Slicer
+** DONE Read more about developing for Slicer
+   CLOSED: [2012-03-20 Tue 16:44]
+There's always more, but I'll implement stuff in the next few bullets.
 *** DONE Read [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Modules][This]] about the types of Slicer Modules
     CLOSED: [2012-03-06 Thu 11:47]
  Slicer4 supports 3 types of modules:
@@ -128,10 +135,14 @@
 - Recommended for fast prototyping.
 - Limited access to Slicer internals.
 
-*** TODO Read more documentation on new modules/extensions
-*** TODO Find more examples
-
-
+*** DONE Read more documentation on new modules/extensions
+    CLOSED: [2012-03-20 Tue 16:43]
+See [[Write a simple testing module]].
+*** DONE Find more examples
+    CLOSED: [2012-03-20 Tue 16:43]
+These are quite useful:
+1. ChangeTracker example: [[https://github.com/fedorov/ChangeTrackerPy][here]].
+2. DICOM Full Brain Tractography: [[http://viewvc.slicer.org/viewvc.cgi/Slicer4/trunk/Modules/Scripted/Scripts/DICOM2FullBrainTractography/][here]].
 ** DONE Compiling Slicer4 from source
    CLOSED: [2012-03-09 Fri 14:09]
 - I used [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Build_Instructions][this]] intructions.
@@ -188,15 +199,20 @@ ccmake ../
 
 - It works! :)
 
-** TODO Write a simple testing module
+** DONE Write a simple testing module
+   CLOSED: [2012-03-20 Tue 16:21]
+- The resulting module is here: [[https://github.com/marianabb/slicer_modules/tree/master/ScriptMB][ScriptMB]].
+
 *** Which type of modules should I try?
 The best options available for module prototypes are:
 - [ ] Command Line Interface: Lots of info [[http://www.slicer.org/slicerWiki/index.php/Slicer3:Execution_Model_Documentation][here]] (for Slicer3, but it's supposed to be very similar).
 - [X] Scripted Module: Doesn't need compiling. Have limited access to Slicer internals. Can run CLI from Python, how to do this [[http://www.slicer.org/slicerWiki/index.php/Slicer4:Python][here]].
 - [ ] External Module: Loadable module that is compiles outside the slicer build tree. [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Tutorials/ExternalModuleWriting][Tutorial]].
 - [ ] Regular Loadable Module: In C++. Compiles with Slicer. [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/Tutorials/ModuleWriting][Tutorial]].
-*** TODO Write a scripted module
-- Here are some initial testing [[file:../slicer_tutorials/first_modules/scripted_module.py][scripts]].
+*** DONE Write a scripted module (simple, for testing)
+    CLOSED: [2012-03-20 Tue 16:10]
+- Here are some initial testing [[https://github.com/marianabb/slicer_modules/blob/master/scripted_module.py][scripts]].
+- Create a module using the [[http://www.slicer.org/slicerWiki/index.php/Documentation/4.0/Developers/ModuleWizard][ModuleWizard]].
 - The file that they open as a volume in the example is a .nrrd, this could be a data file of any type, it just follows some rules.
 - The symbol "~" doesn't work on paths.
 - The commands for loading a volume work ONLY in the compiled version, not in the binary (I don't know why):
@@ -216,6 +232,16 @@ The best options available for module prototypes are:
   slicer.cli.run(CLI_module, None, parameters)
 #+END_SRC
 - Installed the VTK package in the Python tree.
+
+- Slicer can be run as:
+#+BEGIN_SRC sh
+  ./Slicer --python-script <python script to execute after Slicer loads>
+  ./Slicer --python-code <python code to execute after Slicer loads>
+#+END_SRC
+  Now, what is the difference between "python script" and "python code"?
+- Can use matplotlib to plot things. 
+- Slicer/Libs/qMRMLWidgets: MRML-aware widgets
+
 - Installed ipython and matplotlib as explained in the tutorial.
 **** DONE How to launch term in order to run ipython?
      CLOSED: [2012-03-15 Thu 17:55]
@@ -227,16 +253,8 @@ The best options available for module prototypes are:
 #+BEGIN_SRC sh
         ../python-build/bin/ipython
 #+END_SRC
-- Slicer can be run as:
-#+BEGIN_SRC sh
-  ./Slicer --python-script <python script to execute after Slicer loads>
-  ./Slicer --python-code <python code to execute after Slicer loads>
-#+END_SRC
-Now, what is the difference between "python script" and "python code"?
-- Can use matplotlib to plot things. 
-- Slicer/Libs/qMRMLWidgets: MRML-aware widgets
-
 ***** TODO ipython works, but the command 'import slicer' causes segmentation fault. Fix? 
+
 **** DONE Can a function be added on the console?
      CLOSED: [2012-03-15 Thu 15:52]
 Yes, can't use middle-click. Must use right-click+paste or ctrl-c + ctrl-v. This sucks!
@@ -247,32 +265,46 @@ Add the path to the module in "Additional module paths" on Slicer settings. It w
 
 **** DONE How to force a refresh on the UI? 
      CLOSED: [2012-03-16 Fri 13:53]
-In the video tutorial there are two commands that produce innmediate results in the UI:
+- In the video tutorial there are two commands that produce immediate results in the UI:
 #+BEGIN_SRC python
-n = getNode('MRHead1')
-d = n.GetDisplayNode()
-d.SetApplyThreshold(0) # This
-
-i = n.GetImageData()
-import vtk.util.numpy_support
-a = vtk.util.numpy_support.vtk_to_numpy(i.GetPointData().GetScalars())
-a[:] = -a
-i.Modified() # And this!
+  n = getNode('MRHead1')
+  d = n.GetDisplayNode()
+  d.SetApplyThreshold(0) # This
+  
+  i = n.GetImageData()
+  import vtk.util.numpy_support
+  a = vtk.util.numpy_support.vtk_to_numpy(i.GetPointData().GetScalars())
+  a[:] = -a
+  i.Modified() # And this!
 #+END_SRC
 
-**** TODO Try to call a registration method as a CLI from a script.
-- March 16th almost working. The registration is called but need to handle the result properly.
-***** TODO create a repository
+- UPDATE: I think what I was experiencing was not lack of UI response but slowness on the CLIs to finish. I can now tell whether a CLI is still running.
+
+**** DONE Try to call a registration method as a CLI from a script.
+     CLOSED: [2012-03-20 Tue 16:08]
+- March 16th: almost working. The registration is called but need to handle the result properly.
+- March 19th: I'm not sure it's working anymore. Will try to create a simpler CLI call first.  
+- March 20th: It works! I've created an example that calls a CLI that subtracts volumes and another that registers two volumes. See my first module: [[https://github.com/marianabb/slicer_modules/tree/master/ScriptMB][ScriptMB]].
+
+**** DONE create a repository
+      CLOSED: [2012-03-16 Fri 18:45]
+[[https://github.com/marianabb/slicer_modules][Link to the repository]]
      
 **** DONE Make a useful UI on the module
      CLOSED: [2012-03-16 Fri 18:36]
 - The button "GrayModel" on my new module calls the CLI Gray Scale Model Maker.
 - Added button "Register" also. 
-- Need more experimenting and examples. Mostly examples.
+- Need more experimenting and examples. Mostly examples. Found a good one in the source code for ChangeTracker: [[https://github.com/fedorov/ChangeTrackerPy][CTsource]]
   
-*** TODO Write a CLI
-*** TODO Write an external module
-*** TODO Write a loadable module
+** TODO Write a less basic scripted module
+Goals:
+- [ ] Have two steps, like in ChangeTracker. Step 1: Registration, Step 2: Difference quantification.
+- [ ] Choose among many registration CLIs.
+- [ ] Result in a new MRMLScalarVolume that gets created automatically.
+- [ ] Change some parameters for the registration algorithms?
+- [ ] Need to do more thinking for Step 2.
+
+
 ** Interesting details about Slicer
 - Application settings (including the search path for modules/extensions) are stored in a .ini file. The location of the file depends on the OS:
   + Linux + Mac OS X: ~/.config/www.na-mic.org/Slicer.ini or ~/.config/NA-MIC/Slicer.ini
@@ -322,4 +354,4 @@ Here is the [[http://www.fmrib.ox.ac.uk/fslcourse/][Link]]
 Yes, yes I can. [[http://cb.uu.se/~mariana][Here]].
 ** DONE Fix all the links, specially the papers.
    CLOSED: [2012-03-05 Mon 13:55]
-** TODO There is always more to learn about org mode!
+** There is always more to learn about org mode!
