@@ -286,6 +286,8 @@ Add the path to the module in "Additional module paths" on Slicer settings. It w
 - March 19th: I'm not sure it's working anymore. Will try to create a simpler CLI call first.  
 - March 20th: It works! I've created an example that calls a CLI that subtracts volumes and another that registers two volumes. See my first module: [[https://github.com/marianabb/slicer_modules/tree/master/ScriptMB][ScriptMB]].
 
+- The inputs for all the CLIs are [[http://wiki.slicer.org/slicerWiki/index.php/Documentation/4.0/ModulesMetadata][here]].
+
 **** DONE create a repository
       CLOSED: [2012-03-16 Fri 18:45]
 [[https://github.com/marianabb/slicer_modules][Link to the repository]]
@@ -297,13 +299,17 @@ Add the path to the module in "Additional module paths" on Slicer settings. It w
 - Need more experimenting and examples. Mostly examples. Found a good one in the source code for ChangeTracker: [[https://github.com/fedorov/ChangeTrackerPy][CTsource]]
   
 ** TODO Write a less basic scripted module
-Goals:
-- [ ] Have two steps, like in ChangeTracker. Step 1: Registration, Step 2: Difference quantification.
+*** Goals:
+- [ ] Have three steps, like in ChangeTracker. Step 1: Volume selection, Step 2: Registration, Step 3: Difference quantification.
 - [ ] Choose among many registration CLIs.
 - [ ] Result in a new MRMLScalarVolume that gets created automatically.
 - [ ] Change some parameters for the registration algorithms?
 - [ ] Need to do more thinking for Step 2.
 
+*** Progress:
+- [2012-03-20 Tue]: Lots of code reading on ChangeTracker. Started a new module based on it.
+- [2012-03-22 Thu]: Progress on the code based on ChangedTracker. Step 1 and 2 are written but not tested. 
+  Need more documentation and trials on how to compile and add the module.
 
 ** Interesting details about Slicer
 - Application settings (including the search path for modules/extensions) are stored in a .ini file. The location of the file depends on the OS:
