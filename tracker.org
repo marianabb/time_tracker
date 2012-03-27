@@ -334,10 +334,8 @@ Add the path to the module in "Additional module paths" on Slicer settings. It w
   In the mean time I am preparing a set of screenshots on the ACPC Transform module for the meeting with Raili on [2012-03-26 Mon].
 - [2012-03-26 Mon]: Got a response from the forum on how to compile. Managed to compile, by adding the variable Slicer\_DIR (/home/mariana/thesis\_apps/Slicer/Slicer4-SuperBuild/Slicer-build) 
   manually, but it doesn't seem to generate the module Wizard which is the main reason for compiling.
-
-*** TODO Compile the module as an extension
-
-
+- [2012-03-27 Tue]: Did many tests but didn't achieve much. I wrote to the forum again and added my github link so they'll be able to see my code.
+  Fixed it! Had to add tha INSTALL_DIR and DESTINATION_DIR manually in Wizard/CMakeLists.txt.
 
 
 ** Interesting details about Slicer
