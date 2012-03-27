@@ -39,6 +39,26 @@
 - Showed him the first prototype of the new module. It is a Python scripted module.
 - Seems to have potential, but I need more time with it.
 
+** DONE Meeting with Raili and Robin 26-3:
+   CLOSED: [2012-03-26 Mon 11:38]
+- Deadlines: 27 May to have something for the MRI conference in October. We might focus on something specific to have it ready in time.
+- We have a few tracks for this project:
+  1. Deformed brain -> Robust registration.
+  2. Detection of small differences.
+  3. Volume / location accuracy
+  4. GUI / Interaction
+- We will focus on 2 and 3 for the May deadline.
+- Raili will try to find more patients with 2 MRI volumes.
+- Robin will find more MRIs from another project.
+*** DONE Check if the DICOMDIR MRIs work
+    CLOSED: [2012-03-27 Tue 14:57]
+- Created a script: Find it in thesis/matlab/convertDICOMDIR\_dcm.m
+- [2012-03-26 Mon]: I can obtain a 3D array with the values of the volume and a series of 176 .dcm files. Still can't manage to create just one file.
+- [2012-03-27 Tue]: With some help from Robin the script works and creates just one .dcm file. But the planes are wrong on the resulting .dcm.
+  - Lets NOT use DICOMDIRs anymore!
+**** TODO Fix the planes bug on the .dcm creator scripts (mine and Robin's)
+
+
 * Papers and readings
 ** Registration lecture notes
 [[file:../thesis_papers/registration_class_notes.org][Notes on the lecture]]
@@ -310,6 +330,15 @@ Add the path to the module in "Additional module paths" on Slicer settings. It w
 - [2012-03-20 Tue]: Lots of code reading on ChangeTracker. Started a new module based on it.
 - [2012-03-22 Thu]: Progress on the code based on ChangedTracker. Step 1 and 2 are written but not tested. 
   Need more documentation and trials on how to compile and add the module.
+- [2012-03-22 Thu]: I am officially stuck trying to compile/activate the module in Slicer since I've added a subdirectory. I've written to the forum. 
+  In the mean time I am preparing a set of screenshots on the ACPC Transform module for the meeting with Raili on [2012-03-26 Mon].
+- [2012-03-26 Mon]: Got a response from the forum on how to compile. Managed to compile, by adding the variable Slicer\_DIR (/home/mariana/thesis\_apps/Slicer/Slicer4-SuperBuild/Slicer-build) 
+  manually, but it doesn't seem to generate the module Wizard which is the main reason for compiling.
+
+*** TODO Compile the module as an extension
+
+
+
 
 ** Interesting details about Slicer
 - Application settings (including the search path for modules/extensions) are stored in a .ini file. The location of the file depends on the OS:
@@ -324,7 +353,9 @@ Add the path to the module in "Additional module paths" on Slicer settings. It w
 - It's not an option in Slicer4, only in Slicer3. I don't know why it's mentioned in the tutorial, probably the Slicer4 version is not done.
 - More quantification metrics can be added manually.
       
-** TODO Check ChangeTracker source code
+** DONE Check ChangeTracker source code
+   CLOSED: [2012-03-27 Tue 15:02]
+See [[Write a less basic scripted module]]
 ** DONE Does it exist for Slicer3?
     CLOSED: [2012-02-23 Thu 13:59]
     Yes, actually the documentation is better and the module is more complete.
