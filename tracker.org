@@ -204,7 +204,8 @@ ccmake ../
 #+BEGIN_SRC sh
      mkdir Slicer4-SuperBuild
      cd Slicer4-SuperBuild
-     ccmake -DQT_QMAKE_EXECUTABLE:FILEPATH=~/thesis_apps/qtsdk-2010.05/qt/bin/qmake ../
+     ccmake -DQT_QMAKE_EXECUTABLE:FILEPATH=~/thesis_apps/qtsdk-2010.05/qt/bin/qmake ../ # Qt version 4.7.0
+     ccmake -DQT_QMAKE_EXECUTABLE:FILEPATH=~/thesis_apps/QtSDK/Desktop/Qt/474/gcc/bin/qmake ../ # Qt version 4.7.4
 #+END_SRC
   2. Create the second project in Slicer4-Superbuild/Slicer-build: the "traditional" build directory of Slicer, by running inside Slicer4-Superbuild:
 #+BEGIN_SRC sh 
@@ -319,14 +320,14 @@ Add the path to the module in "Additional module paths" on Slicer settings. It w
 - Need more experimenting and examples. Mostly examples. Found a good one in the source code for ChangeTracker: [[https://github.com/fedorov/ChangeTrackerPy][CTsource]]
   
 ** TODO Write a less basic scripted module
-*** Goals:
+*** Goals
 - [ ] Have three steps, like in ChangeTracker. Step 1: Volume selection, Step 2: Registration, Step 3: Difference quantification.
-- [ ] Choose among many registration CLIs.
+- [X] Choose among many registration CLIs.
 - [ ] Result in a new MRMLScalarVolume that gets created automatically.
 - [ ] Change some parameters for the registration algorithms?
-- [ ] Need to do more thinking for Step 2.
+- [ ] Need to do more thinking for Step 3.
 
-*** Progress:
+*** Progress
 - [2012-03-20 Tue]: Lots of code reading on ChangeTracker. Started a new module based on it.
 - [2012-03-22 Thu]: Progress on the code based on ChangedTracker. Step 1 and 2 are written but not tested. 
   Need more documentation and trials on how to compile and add the module.
@@ -335,8 +336,21 @@ Add the path to the module in "Additional module paths" on Slicer settings. It w
 - [2012-03-26 Mon]: Got a response from the forum on how to compile. Managed to compile, by adding the variable Slicer\_DIR (/home/mariana/thesis\_apps/Slicer/Slicer4-SuperBuild/Slicer-build) 
   manually, but it doesn't seem to generate the module Wizard which is the main reason for compiling.
 - [2012-03-27 Tue]: Did many tests but didn't achieve much. I wrote to the forum again and added my github link so they'll be able to see my code.
-  Fixed it! Had to add tha INSTALL_DIR and DESTINATION_DIR manually in Wizard/CMakeLists.txt.
+  Fixed it! Had to add tha INSTALL\_DIR and DESTINATION\_DIR manually in Wizard/CMakeLists.txt ([[bug on their code][better solution?]]).
+- [2012-03-28 Wed]: The module must be configured with:
+#+BEGIN_SRC sh
+  ccmake -DSlicer_DIR:PATH=/home/mariana/thesis_apps/Slicer/Slicer4-SuperBuild/Slicer-build/ ../
+#+END_SRC
+  The module currently has only two steps, but it's working.
+- [2012-03-29 Thu]: The forum answered, it turns out it was a bug on their code. The have fixed it, now I'm updating (and recompiling, which makes me really sad...).
+  Compilation is NOT done (it's 17.45, started it before lunch). Made many changes to add more registration methods but I'm unable to test, good luck tomorrow! haha!
 
+*** TODO Add Fiducial registration
+Must add a new block of choices that appear if I select this method to choose the two sets of fiducial points.
+*** TODO Check all the options in the registration methods and choose wisely
+Maybe add extra blocks that allow the user to modify details.
+
+*** TODO Do something about the function setBgFgVolumes legacy from Helper.py
 
 ** Interesting details about Slicer
 - Application settings (including the search path for modules/extensions) are stored in a .ini file. The location of the file depends on the OS:
