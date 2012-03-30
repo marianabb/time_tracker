@@ -58,6 +58,14 @@
   - Lets NOT use DICOMDIRs anymore!
 **** TODO Fix the planes bug on the .dcm creator scripts (mine and Robin's)
 
+** DONE Meeting with Robin [2012-03-30 Fri]
+   CLOSED: [2012-03-30 Fri 16:28]
+Current goals:
+- [ ] Finish adding registration methods.
+- [ ] Add a field for an already registered volume.
+- [ ] Create a third step for quantification that only substract the volumes.
+- [ ] Show the differences as a different color/intensity on the screen.
+
 
 * Papers and readings
 ** Registration lecture notes
@@ -342,8 +350,9 @@ Add the path to the module in "Additional module paths" on Slicer settings. It w
   ccmake -DSlicer_DIR:PATH=/home/mariana/thesis_apps/Slicer/Slicer4-SuperBuild/Slicer-build/ ../
 #+END_SRC
   The module currently has only two steps, but it's working.
-- [2012-03-29 Thu]: The forum answered, it turns out it was a bug on their code. The have fixed it, now I'm updating (and recompiling, which makes me really sad...).
++ [2012-03-29 Thu]: The forum answered, it turns out it was a bug on their code. The have fixed it, now I'm updating (and recompiling, which makes me really sad...).
   Compilation is NOT done (it's 17.45, started it before lunch). Made many changes to add more registration methods but I'm unable to test, good luck tomorrow! haha!
++ [2012-03-30 Fri]: The module loading works on the updated Slicer version. Added more registration methods. Fiducial registration still has bugs.
 
 *** TODO Add Fiducial registration
 Must add a new block of choices that appear if I select this method to choose the two sets of fiducial points.
