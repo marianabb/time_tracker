@@ -61,11 +61,24 @@
 ** DONE Meeting with Robin [2012-03-30 Fri]
    CLOSED: [2012-03-30 Fri 16:28]
 Current goals:
-- [ ] Finish adding registration methods.
-- [ ] Add a field for an already registered volume.
-- [ ] Create a third step for quantification that only substract the volumes.
-- [ ] Show the differences as a different color/intensity on the screen.
+- [X] Finish adding registration methods.
+- [X] Add a field for an already registered volume.
+- [X] Create a third step for quantification that only substract the volumes.
+- [X] Show the differences as a different color/intensity on the screen.
 
+** DONE Meeting with Robin [2012-04-10 Tue]
+   CLOSED: [2012-04-10 Tue 12:37]
+- [ ] User defined threshold
+- [ ] Fix the volumes that we have. Make a list of what we have/need.
+- [ ] Figure out if we can get a vector field transform to use for the Jacobian.
+- [ ] What are they using in ChangeTracker to quantify changes?
+- [ ] Check the 'slow' method in ChangeTracker.
+
+** DONE Meeting with Raili [2012-04-11 Wed]
+   CLOSED: [2012-04-11 Wed 11:47]
+- Fiducials: base of brain and PC are more reliable. AC not so much. Measure between bones in brain stem might also be reliable.
+- We got another volume, this one has 3 measurements with 3 different tumor status.
+- We want to see the differences in 2D and 3D also, depending on the case (bigger 3D, smaller 2D perhaps). Maybe we can make it choosable, with buttons to disappear.
 
 * Papers and readings
 ** Registration lecture notes
@@ -356,6 +369,9 @@ Add the path to the module in "Additional module paths" on Slicer settings. It w
 - [2012-03-30 Fri]: The module loading works on the updated Slicer version. Added more registration methods. Fiducial registration still has bugs.
 - [2012-04-02 Mon]: Fiducial registration now works. Started quantification step, just a squeleton so far.
 - [2012-04-03 Tue]: Added subtraction to quantification step. Improved validation on registration step. Added registered volume and transform result on gui.
+- [2012-04-04 Wed] until [2012-04-07 Mon] (easter): Made everything work on my personal computer. Added volume rendering of the differences after subtraction.
+- [2012-04-10 Tue]: Added user defined thresholding before rendering of the volume. Needs more tests.
+- [2012-04-11 Wed]: Meeting with Raili. 
 
 
 *** DONE Add Fiducial registration
@@ -375,8 +391,10 @@ Maybe add extra blocks that allow the user to modify details.
 Just input them backwards! 
 *** TODO Handle only transform, no registered volume
 *** TODO Handle non-linear transforms
-
+*** TODO Disable Load test data button while on progress
 *** TODO Make the GUI simpler!
+*** TODO User selected threshold
+*** TODO If registration method + registeredVolumeID changes -> subtractedVolumeID must be reset.
 
 ** Interesting details about Slicer
 - Application settings (including the search path for modules/extensions) are stored in a .ini file. The location of the file depends on the OS:
