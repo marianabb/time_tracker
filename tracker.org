@@ -71,8 +71,21 @@ Current goals:
 - [X] User defined threshold
 - [X] Fix the volumes that we have. Make a list of what we have/need.
 - [ ] Figure out if we can get a vector field transform to use for the Jacobian.
+      - The 'slow' method in ChangeTracker uses this and the Jacobian. So I guess it's possible. However, it's only included in Slicer 3.
 - [ ] What are they using in ChangeTracker to quantify changes?
 - [ ] Check the 'slow' method in ChangeTracker.
+
+** DONE Meeting with Joel + Robin [2012-04-18 Wed]
+   CLOSED: [2012-04-18 Wed 11:38]
+- We got 38 volumes of normal patients taken when they were 75 and 80 years old.
+- They might also be interested in our tool.
+- Platinum looks ok, but I think Slicer has more options.
+- [X] He sent a paper about brain lesions. Google for 'white matter lesions flair'.
+- [X] They will send information about skull stripping
+- [X] They will send more volumes of people without differences. Plus they also sent a whole body volume.
+- [ ] Check tensor and voxel based morphometry. I think they might be the same metrics they use in ChangeTracker.
+- [ ] Check FreeSurfer for atlas.
+
 
 ** DONE Meeting with Raili [2012-04-11 Wed]
    CLOSED: [2012-04-11 Wed 11:47]
@@ -346,7 +359,6 @@ Add the path to the module in "Additional module paths" on Slicer settings. It w
 - [X] Have three steps, like in ChangeTracker. Step 1: Volume selection, Step 2: Registration, Step 3: Difference quantification.
 - [X] Choose among many registration CLIs.
 - [X] Result in a new MRMLScalarVolume that gets created automatically.
-- [ ] Change some parameters for the registration algorithms?
 - [ ] Need to do more thinking for Step 3.
 
 *** Progress
@@ -375,7 +387,7 @@ Add the path to the module in "Additional module paths" on Slicer settings. It w
 - [2012-04-12 Thu]: Discovered and fixed the problem with some of the volumes. We need to include the dicominfo on the .dcm file, otherwise it uses some default
   with wrong planes. Created a script 'convertall.m' to convert all the DICOMDIR files we currently have into .dcm.
 - [2012-04-13 Fri]: Robin modified the Matlab script to create .vtk volumes but there's still issues with the dimensions depending on the volume.
-  Desicion: wait until the meeting with Joel. He might have volumes that we can use directly.
+  Decision: wait until the meeting with Joel. He might have volumes that we can use directly.
 - [2012-04-16 Mon]: [[How do they do quantification][Reading ChangeTracker code]]
 
 
@@ -397,10 +409,15 @@ Just input them backwards!
 *** TODO Handle only transform, no registered volume
 *** TODO Handle non-linear transforms
 *** TODO Disable Load test data button while on progress
+This is not as simple as it sounds. I don't know if there is a way to modify the UI while calling a simple function.
 *** TODO Make the GUI simpler!
 *** DONE User selected threshold
     CLOSED: [2012-04-11 Wed 15:02]
 
+** TODO Registration tests
+*** TODO Fiducials registration
+*** TODO Skull stripping + registration
+*** TODO BRAINSFit with a ROI to unselect brain?
 
 ** Interesting details about Slicer
 - Application settings (including the search path for modules/extensions) are stored in a .ini file. The location of the file depends on the OS:
@@ -439,14 +456,14 @@ See [[Write a less basic scripted module]]
 
 ** TODO How do they do quantification?
 The process is divided into 5 steps:
-1. SelectScans
+1. SelectScans:
 #+BEGIN_SRC python
    pNode = self.parameterNode()
    pNode.SetParameter('baselineVolumeID', baselineID)
    pNode.SetParameter('followupVolumeID', followupID)
 #+END_SRC
 
-2. DefineROI
+2. DefineROI:
    Defines the ROI and the segmentation of the Baseline volume according to the ROI.
 #+BEGIN_SRC python
    roi = slicer.mrmlScene.CreateNodeByClass('vtkMRMLAnnotationROINode')
@@ -463,7 +480,7 @@ The process is divided into 5 steps:
    pNode.SetParameter('croppedBaselineVolumeSegmentationID', roiSegmentation.GetID())
 #+END_SRC
 
-3. SegmentROI
+3. SegmentROI:
    User defined threshold. Uses an opacity map to show the areas included in the threshold.
 #+BEGIN_SRC python
    pNode = self.parameterNode()
@@ -485,20 +502,40 @@ The process is divided into 5 steps:
 
    pNode.SetParameter('metrics', metricsList)
 #+END_SRC
-
-5. ReportROI
-Shows the results for all the metrics (only one for Slicer 4).
-#+BEGIN_SRC python
    
-#+END_SRC
+   - The CLI is located in the same code /Metrics/IntensityDifference. It's written in c++.
+
+
+5. ReportROI:
+   Shows the results for all the metrics (only one for Slicer 4).
+
+* TODO Focus on Tensor-based Morphometry
+- Taking ChangeTracker as base we know that:
+  1. It uses BRAINSDemonWarp (DemonsRegistrationJacobianMetric).
+     - The output is a GridTransform which is supposed to be a Displacement Field (exactly what we want).
+     - The implementation of GridTransforms UI in Slicer is not complete. The backend should work according to [[http://slicer-devel.65872.n3.nabble.com/Grid-transforms-in-Slicer-4-td2426968.html][this]] forum thread.
+  2. It uses the Jacobian to calculate the amount of change and the volume of the changes.
+  3. It is currently not working in Slicer4. So we can't just use the code.
+
+** TODO Learn everything about the Jacobian
+
+** TODO Learn to work with displacement fields in ITK + Slicer
+
+
 
 * Other tools
 ** TODO Do some experiments with FSL (The tool mentioned by Raili)
 Here is the [[http://www.fmrib.ox.ac.uk/fslcourse/][Link]]
 
-** TODO Platinum-image. Developed at Uppsala Hospital
+** DONE Platinum-image. Developed at Uppsala Hospital
+   CLOSED: [2012-04-18 Wed 11:41]
 - Web: http://code.google.com/p/platinum-image/
 - Based on ITK, VTK, FLTK.
+- Created from scratch for specific project needs. Modules can be added depending on the project.
+- Seems to be simpler than Slicer.
+- Registration of volumes is also slow.
+
+** TODO FreeSurfer
 
 ** TODO Check out elastix
 - Web: http://elastix.isi.uu.nl/
@@ -506,6 +543,42 @@ Here is the [[http://www.fmrib.ox.ac.uk/fslcourse/][Link]]
 - Only command line.
 - Made to compare registration methods.
 
+
+** TODO Learn some ITK
+Open source registration and segmentation toolkit.
+- [2012-04-19 Thu] Reading some of the [[http://www.itk.org/ItkSoftwareGuide.pdf][manual]].
+- ITK modules:
+  1. Insight:: Source code, examples and aplications.
+  2. InsightDocuments:: Documents, tutorials, materials for design and marketing.
+  3. InsightApplications:: Complex applications using ITK and other systmes such as VTK, Qt and FLTK. Should only be compilead after the Insight module.
+- Uses 'generic programming':: types will be specified later and then instantiated when needed for specific types provided as parameters. Uses Standard Template
+  Library in C++ (STL) that allow functions and classes to operate with generic types (different data trypes without being rewritten for each one).
+- Rather than using the standard C++ class constructor and destructor, instances of an ITK class are created with the static class New() method.
+- Implements memory management through reference counting. All instances of an ITK object have a 'Register()' method invoked on them by any other object that 
+  references them. To decrement the reference count there is also a 'Delete()' method. BUT the helper class 'itk::SmartPointer' takes care of this!.
+#+BEGIN_SRC c++
+  MyRegistrationFunction(){
+
+  // here an interpolator is created and associated to the SmartPointer "interp".
+  InterpolatorType::Pointer interp = InterpolatorType::New();
+
+  } // End of scope, interp is destroyed and the actual interpolator object reference count is decremented.
+#+END_SRC 
+- Event handling is implemented using thr Subject/Observer design pattern.
+- Main types of data:
+  1. Image:: n-dimensional, regular sampling of data.
+  2. Mesh:: n-dimensional, unstructured grid. Topology defined by a set if cells with a type and connectivity list.
+- It supports Python and Tcl through CABLE wrapping tool.
+
+*** DONE Compile ITK
+    CLOSED: [2012-04-20 Fri 10:06]
+- Download the source code, [[http://www.itk.org/Wiki/ITK/Git/Develop][instructions]].
+- Configure and compile:
+#+BEGIN_SRC bash
+  mkdir ITK-build && cd ITK-build
+  cmake ../
+  make -j<number of cores>
+#+END_SRC
 
 * Extras
 ** DONE New repository for papers
