@@ -72,26 +72,33 @@ Current goals:
 - [X] Fix the volumes that we have. Make a list of what we have/need.
 - [ ] Figure out if we can get a vector field transform to use for the Jacobian.
       - The 'slow' method in ChangeTracker uses this and the Jacobian. So I guess it's possible. However, it's only included in Slicer 3.
-- [ ] What are they using in ChangeTracker to quantify changes?
-- [ ] Check the 'slow' method in ChangeTracker.
-
-** DONE Meeting with Joel + Robin [2012-04-18 Wed]
-   CLOSED: [2012-04-18 Wed 11:38]
-- We got 38 volumes of normal patients taken when they were 75 and 80 years old.
-- They might also be interested in our tool.
-- Platinum looks ok, but I think Slicer has more options.
-- [X] He sent a paper about brain lesions. Google for 'white matter lesions flair'.
-- [X] They will send information about skull stripping
-- [X] They will send more volumes of people without differences. Plus they also sent a whole body volume.
-- [ ] Check tensor and voxel based morphometry. I think they might be the same metrics they use in ChangeTracker.
-- [ ] Check FreeSurfer for atlas.
-
+      - This is most likely possible, but the ITK code is complicated. I'm working on it, see [[do quantification][here]] (CT quantification) and [[Learn some ITK][here]] (ITK).
+- [X] What are they using in ChangeTracker to quantify changes? See [[do quantification][here]].
 
 ** DONE Meeting with Raili [2012-04-11 Wed]
    CLOSED: [2012-04-11 Wed 11:47]
 - Fiducials: base of brain and PC are more reliable. AC not so much. Measure between bones in brain stem might also be reliable.
 - We got another volume, this one has 3 measurements with 3 different tumor status.
 - We want to see the differences in 2D and 3D also, depending on the case (bigger 3D, smaller 2D perhaps). Maybe we can make it choosable, with buttons to disappear.
+** DONE Meeting with Joel + Robin [2012-04-18 Wed]
+   CLOSED: [2012-04-18 Wed 11:38]
+- We got 38 volumes of normal patients taken when they were 75 and 80 years old.
+- They might also be interested in our tool.
+- Platinum looks ok, but I think Slicer has more options.
+- [X] He sent a paper about brain lesions. Google for 'white matter lesions flair'.
+      Finished reading it on [2012-04-23 Mon]. I don't think I'll make a summary, it's interesting, but too medical.
+- [X] They will send information about skull stripping
+      Read it. Short, concise and useful. Will probably use it later on.
+- [X] They will send more volumes of people without differences. Plus they also sent a whole body volume.
+- [ ] Check tensor and voxel based morphometry. I think they might be the same metrics they use in ChangeTracker.
+- [ ] Check FreeSurfer for atlas.
+
+** TODO Meeting with Robin [2012-04-23 Mon]:
+Three main thing we need to do now (already in the TODO, but we defined an order):
+1. [ ] Learn ITK + write a program callable from Slicer.
+2. [ ] Find papers and read about Tensor based Morphometry.
+3. [ ] Experiments with registration methods. After we know which method to use, since the registration approach depends on it.
+
 
 * Papers and readings
 ** Registration lecture notes
@@ -569,6 +576,9 @@ Open source registration and segmentation toolkit.
   1. Image:: n-dimensional, regular sampling of data.
   2. Mesh:: n-dimensional, unstructured grid. Topology defined by a set if cells with a type and connectivity list.
 - It supports Python and Tcl through CABLE wrapping tool.
+
+*** TODO Write a simple ITK program that can be called from Slicer
+
 
 *** DONE Compile ITK
     CLOSED: [2012-04-20 Fri 10:06]
