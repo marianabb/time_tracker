@@ -28,8 +28,8 @@
 ** DONE Meeting with Robin 05-3:
   CLOSED: [2012-03-05 Mon 11:12]
 - Continue reading Slicer documentation
-- [ ] Goal for the week: Create a module, not necesarily very functional.
-- [ ] Next week we must agree on what functions and methods to use according to the papers read.
+- [X] Goal for the week: Create a module, not necesarily very functional.
+- [X] Next week we must agree on what functions and methods to use according to the papers read.
 ** No meeting on 12-3 - I was sick again
 ** Meeting with Robin 15-3 (Thursday):
 - Progress on compilation.
@@ -70,7 +70,7 @@ Current goals:
    CLOSED: [2012-04-10 Tue 12:37]
 - [X] User defined threshold
 - [X] Fix the volumes that we have. Make a list of what we have/need.
-- [ ] Figure out if we can get a vector field transform to use for the Jacobian.
+- [X] Figure out if we can get a vector field transform to use for the Jacobian.
       - The 'slow' method in ChangeTracker uses this and the Jacobian. So I guess it's possible. However, it's only included in Slicer 3.
       - This is most likely possible, but the ITK code is complicated. I'm working on it, see [[do quantification][here]] (CT quantification) and [[Learn some ITK][here]] (ITK).
 - [X] What are they using in ChangeTracker to quantify changes? See [[do quantification][here]].
@@ -90,15 +90,42 @@ Current goals:
 - [X] They will send information about skull stripping
       Read it. Short, concise and useful. Will probably use it later on.
 - [X] They will send more volumes of people without differences. Plus they also sent a whole body volume.
-- [ ] Check tensor and voxel based morphometry. I think they might be the same metrics they use in ChangeTracker.
+- [X] Check tensor and voxel based morphometry. I think they might be the same metrics they use in ChangeTracker.
 - [ ] Check FreeSurfer for atlas.
 
-** TODO Meeting with Robin [2012-04-23 Mon]:
-Three main thing we need to do now (already in the TODO, but we defined an order):
-1. [ ] Learn ITK + write a program callable from Slicer.
+** DONE Meeting with Robin [2012-04-23 Mon]
+   CLOSED: [2012-04-23 Mon 16:01]
+Three main things we need to do now (already in the TODO, but we defined an order):
+1. [X] Learn ITK + write a program callable from Slicer.
 2. [ ] Find papers and read about Tensor based Morphometry.
 3. [ ] Experiments with registration methods. After we know which method to use, since the registration approach depends on it.
 
+** DONE Meeting with Robin [2012-05-08 Tue]
+   CLOSED: [2012-05-08 Tue 15:21]
+- [ ] Robin found a nice chapter from book on Morphometry. Must read.
+- [X] I will continue working on deformation fields in ITK. See what I can do with them, obtain their information.
+- [ ] Robin wrote to Joel about the summer job. He is at a conference, will probably answer mext week. 
+- Robin will help with reference letters.
+
+** DONE Meeting with Raili [2012-04-25 Wed]
+   CLOSED: [2012-04-25 Wed 11:24]
+- We will start our experiments with artificial differences. The most "useful" differences according to Raili are in the center (corpus callosum) and
+  in the frontal part of the brain. The frontal part is important because an injure here might only produce "subjective" symptoms on the patients,
+  which are very hard to measure and very hard to prove for insurance companies.
+- The type of injuries we are looking for are in size and localized, usually we are not interested in differences in intensities because this differences
+  could have been inserted by the MRI technique.
+  - Question for Robin: does this eliminate voxel-based morphometry as one of the main comparison techniques?
+- There are more projects where this application could be useful. They are measuring the hypothalamus manually for comparison and would like to measure
+  cortical thickness but it's impossible to do it manually.
+- We will meet again when we have something more to show. Raili will be away the first week of May and Robin will be away in June (3rd to 26th).
+
+** DONE Meeting with Robin [2012-05-29 Tue]
+   CLOSED: [2012-05-29 Tue 11:57]
+   - [ ] Try obtaining a Grid transform and using it as a deformation field from BSpline deformable registration.
+   - [ ] Try logarithm again but adding +1 
+   - [ ] Summary of morphometry chapter
+   - Robin is leaving soon to France. He'll be out all of June but we will maintain contact at least 2 times a week.
+     
 
 * Papers and readings
 ** Registration lecture notes
@@ -461,7 +488,8 @@ See [[Write a less basic scripted module]]
 - Here is a [[http://slicer.org/pages/LicenseText][Link]] to the Slicer License Agreement.
 - Basically it says that the software is open source and grants everything to 'Brigham' (The Brigham and Women's Hospital, Inc.).
 
-** TODO How do they do quantification?
+** DONE How do they do quantification?
+   CLOSED: [2012-05-29 Tue 14:25]
 The process is divided into 5 steps:
 1. SelectScans:
 #+BEGIN_SRC python
@@ -516,42 +544,8 @@ The process is divided into 5 steps:
 5. ReportROI:
    Shows the results for all the metrics (only one for Slicer 4).
 
-* TODO Focus on Tensor-based Morphometry
-- Taking ChangeTracker as base we know that:
-  1. It uses BRAINSDemonWarp (DemonsRegistrationJacobianMetric).
-     - The output is a GridTransform which is supposed to be a Displacement Field (exactly what we want).
-     - The implementation of GridTransforms UI in Slicer is not complete. The backend should work according to [[http://slicer-devel.65872.n3.nabble.com/Grid-transforms-in-Slicer-4-td2426968.html][this]] forum thread.
-  2. It uses the Jacobian to calculate the amount of change and the volume of the changes.
-  3. It is currently not working in Slicer4. So we can't just use the code.
 
-** TODO Learn everything about the Jacobian
-
-** TODO Learn to work with displacement fields in ITK + Slicer
-
-
-
-* Other tools
-** TODO Do some experiments with FSL (The tool mentioned by Raili)
-Here is the [[http://www.fmrib.ox.ac.uk/fslcourse/][Link]]
-
-** DONE Platinum-image. Developed at Uppsala Hospital
-   CLOSED: [2012-04-18 Wed 11:41]
-- Web: http://code.google.com/p/platinum-image/
-- Based on ITK, VTK, FLTK.
-- Created from scratch for specific project needs. Modules can be added depending on the project.
-- Seems to be simpler than Slicer.
-- Registration of volumes is also slow.
-
-** TODO FreeSurfer
-
-** TODO Check out elastix
-- Web: http://elastix.isi.uu.nl/
-- Open Source based on ITK.
-- Only command line.
-- Made to compare registration methods.
-
-
-** TODO Learn some ITK
+* ITK
 Open source registration and segmentation toolkit.
 - [2012-04-19 Thu] Reading some of the [[http://www.itk.org/ItkSoftwareGuide.pdf][manual]].
 - ITK modules:
@@ -577,10 +571,7 @@ Open source registration and segmentation toolkit.
   2. Mesh:: n-dimensional, unstructured grid. Topology defined by a set if cells with a type and connectivity list.
 - It supports Python and Tcl through CABLE wrapping tool.
 
-*** TODO Write a simple ITK program that can be called from Slicer
-
-
-*** DONE Compile ITK
+** DONE Compile ITK
     CLOSED: [2012-04-20 Fri 10:06]
 - Download the source code, [[http://www.itk.org/Wiki/ITK/Git/Develop][instructions]].
 - Configure and compile:
@@ -589,6 +580,150 @@ Open source registration and segmentation toolkit.
   cmake ../
   make -j<number of cores>
 #+END_SRC
+
+** DONE Write a simple ITK program that can be called from Slicer
+   CLOSED: [2012-04-26 Thu 16:17]
+- My testing ITK program subtracts two volumes.
+  - [2012-04-24 Tue] A pretty good skeleton. Doesn't work completely yet.
+  - [2012-04-26 Thu] The program works. There is a problem with the output volume since it creates a Label Map by default. 
+    But it's easily fixable directly in Slicer, and I think the goal of this test is complete.
+    I added the program to the git repository [[https://github.com/marianabb/slicer_modules/tree/master/MRIChangeDetector/Quantifiers/ITKTest][here]].
+
+** TODO Experiment with displacement fields in ITK
++ [2012-04-26 Thu] 
+  - Created a new ITK program (CLI) for Slicer: ITKTensor.
+*** DONE Read useful sections in the ITK manual
+    CLOSED: [2012-05-08 Tue 11:43]
+    1. Resampling Using a Deformation Field (242)
+       - In the example code a DisplacementFieldType is created as:
+#+BEGIN_SRC c++
+         typedef   float                                         VectorComponentType;
+         typedef   itk::Vector< VectorComponentType, Dimension > VectorPixelType;
+         typedef   itk::Image< VectorPixelType,  Dimension >     DisplacementFieldType;
+#+END_SRC
+         So a Displacement Field is an ITK Image where the elements are Vectors. Make sense.
+       - The filter used to apply the field on the original image is a WarpImageFilter:
+#+BEGIN_SRC c++
+          typedef itk::WarpImageFilter< ImageType, ImageType, DisplacementFieldType  >  FilterType;
+#+END_SRC
+
+    1. Deformable Registration (438)
+       - Not very useful unless I'm planning to write my own registration algorithm. Since I'm not, I'll just use the methods provided in Slicer.
+    2. Demons Deformable Registration (461)
+       - Same as with deformable registration.
+       - Has useful pointers on how to handle DeformationField types.
+    3. Visualizing Deformation Fields (469)
+       - Uses ParaView to visualize 2D and 3D Deformation Fields. To visualize the field in Paraview:
+         1. Load the Deformation field (a .mha file in my case).
+         2. Click on apply.
+         3. Use the "Glyph" filter with Arrows to show the field.
+         4. Click on apply.
++ [2012-05-08 Tue]
+  - Considerations for the CLI ITKTensor:
+    1. Inputs: FixedVolume, MovingVolume, DeformationField resulting from registration.
+    2. Ouputs: Differences as volumes measured in mm^3.
+    3. How to get there?
+       - I can use initially the ChangeTracker metric called "DemonsRegistrationJacobianMetric". Code [[https://github.com/fedorov/ChangeTrackerPy/blob/master/Metrics/DemonsJacobian/ChangeTrackerDemonsRegistrationJacobianMetric.cxx][here]].
+         - It uses the deformation field from DemonsRegistration to calculate Jacobian and volume differences from there.
+         - It seems PERFECT! But it must be buggy, otherwise the metric would be included in Slicer4.
+         - It uses the class itk::WarpJacobianDeterminantFilter which is not included in ITK. It's part of the [[http://www-sop.inria.fr/asclepios/software/vtkINRIA3D/][vtkINRIA3D]] project.
++ [2012-05-11 Fri]
+  - Reading about Iterators to go through images and volumes as fast as possible:
+    - Most iterators increment and decrement in the direction of the fastest increasing image dimension, wrapping to the first position in
+      the next higher dimension at region boundaries. An iterator first moves accross columns, then down rows, the from slice to slice, and so on.
+    - A conditional interator visits pixels only if they have certain values or connectivities. But there is no mention of a specific
+      class that implements this. I guess and "if" could suffice.
+    - For efficiency, most ITK image iterators do not perform bounds checking. It is possible to move an iterator aoutside its valid region.
+    - itk::ImageRegionIterator only calculates an index when is asked for, while itk::ImageRegionIteratorWithIndex maintains its index location
+      as a member variable that is updated if the interator moves. Teration speed is penalized, but the queries are more efficient.
+    - itk::NeighborhoodIterator could be useful to follow de path of some change. Although we might already have that from the deformation field.
++ [2012-05-14 Mon]
+  - I now have a module that works and outputs a LabelMap with colors indicating where the volume has shrunk or grown.
+  - The code comes mostly from ChangeTracker. Seems to work.
+  - The code for the module is [[https://github.com/marianabb/slicer_modules/tree/master/MRIChangeDetector/Quantifiers/ITKTensor][here]].
+           
+*** TODO Produce an image as output where the color/grayscale value is related to the Jacobian
++ [2012-05-15 Tue]
+  - Tried just creating an image from the duplicate. There is a small problem with the types: I want the grayscale image to have float values, but the
+    base volume has int values. A solution is to use floats always, but this makes a big difference in the LabelMap.
+  - Tried using the ITK example to create an image based on vector magnitudes. But the filter I'm supposed to use is not included in the Slicer version.
+    (At least this is what I think). The example I tries is [[http://www.itk.org/Wiki/ITK/Examples/VectorImages/VectorMagnitudeImageFilter][here]].
+  - Next idea: Find the maximum of the jacobian values and scale from 0 to 255. (measure * 255)/maxJac.
+
++ [2012-05-21 Mon]
+  - Find maxJacobian with [[http://www.itk.org/Wiki/ITK/Examples/ImageProcessing/MinimumMaximumImageCalculator][this]] example. Created an image scaling from 0 to 255. No visible difference from before... Robin suggested logarithmic filter.
+  - Changed to a better way of scaling (using a filter). Example [[http://www.itk.org/Wiki/ITK/Examples/ImageProcessing/RescaleIntensityImageFilter][here]].
+  - Tried to maintain the LabelMap with char and the OutVolume with float with casting, as shown [[http://www.itk.org/Wiki/ITK/Examples/ImageProcessing/CastImageFilter][here]]. Not very sucessfully.
+
++ [2012-05-24 Thu]
+  - Read part of the chapter about Morphometry.
+  - Managed to fix the types problem by creating a new volume with float types from scratch and filling it with the Jacobians during the iteration.
+  - Attempt: Use itk::LogImageFilter to calculate the logarithm of the Jacobians before scaling the grey values between 0 and 255.
+    Result: Everything is 'nan' in the resulting volume. 
+    - Maybe because there are quite a few Jacobians that are less than zero. Using the absolute values didn't work.
+
++ [2012-05-29 Tue]
+  - Meeting with Robin generated a TODO list:
+**** TODO Try obtaining a Grid transform and using it as a deformation field from BSpline deformable 
+**** TODO Try logarithm again but adding +1
+**** TODO Try the algorithm with other volumes. Begin with Meningioma1 and Meningioma2.
+**** TODO Do some experimenting to see which values of the Jacobian are more important and which can be ignored.
+
+
+* TODO Focus on Tensor-based Morphometry
+- Taking ChangeTracker as base we know that:
+  1. It uses BRAINSDemonWarp (DemonsRegistrationJacobianMetric).
+     - The output is a GridTransform which is supposed to be a Displacement Field (exactly what we want).
+     - The implementation of GridTransforms UI in Slicer is not complete. The backend should work according to [[http://slicer-devel.65872.n3.nabble.com/Grid-transforms-in-Slicer-4-td2426968.html][this]] forum thread.
+  2. It uses the Jacobian to calculate the amount of change and the volume of the changes.
+  3. It is currently not working in Slicer4. So we can't just use the code.
+
+** TODO Learn everything about the Jacobian
+- To apply a Jacobian filter on ITK:
+  1. itk::DeformationFieldJacobianDeterminantFilter :: Computes a scalar image from a vector image (e.g., deformation field) input, 
+       where each output scalar at each pixel is the Jacobian determinant of the "vector field" at that location.  
+       Computes the proper Jacobian Determinant for a vector field described this way as det[ dT/dx ] = det[ du/dx ].
+       In most cases deformation field mappings are represented as displacements from the current location so that an identity 
+       mapping is represented by an all zero vector field. In that more common case, one should use the DisplacementFieldJacobianDeterminantFilter.
+  2. itk::DisplacementFieldJacobianDeterminantFilter :: This calculation is correct in the case where the vector image is a "displacement" from 
+       the current location. The computation for the jacobian determinant is: det[ dT/dx ] = det[ I + du/dx ].
+  3. itk::WarpJacobianDeterminantFilter :: Not included in ITK. Part of the [[http://www-sop.inria.fr/asclepios/software/vtkINRIA3D/][vtkINRIA3D]] project. Computes a scalar image from a vector 
+     image (e.g., deformation field) input, where each output scalar at each pixel is the Jacobian determinant of the "warping" at that location.
+     Note that the determinant of a zero "vector field" is also zero, whereas the Jacobian determinant of the corresponding identity "warp transformation" is 1.0.
+  
+- Conclusions on this:       
+  - I am not entirely sure about the differences between 2. and 3. But from what I see in the documentation, they appear to be closely related. The problem
+    with the "vector fields" is that the determinant of a zero vector field is also zero, while the determinant of a zero "warp transform" is 1.0. But
+    2. appears to handle this by adding ones to the diagonal elements of the Jacobian prior to taking the derivative.
+  - I decided to use 2. for the module, since it's already included in ITK.
+
+** TODO Read the book chapter about this found by Robin
+- Read some between [2012-05-23 Wed] and [2012-05-24 Thu]. Must continue reading and do a summary soon.
+   
+
+* Other tools
+** TODO Do some experiments with FSL (The tool mentioned by Raili)
+Here is the [[http://www.fmrib.ox.ac.uk/fslcourse/][Link]]
+
+** DONE Platinum-image. Developed at Uppsala Hospital
+   CLOSED: [2012-04-18 Wed 11:41]
+- Web: http://code.google.com/p/platinum-image/
+- Based on ITK, VTK, FLTK.
+- Created from scratch for specific project needs. Modules can be added depending on the project.
+- Seems to be a lot simpler than Slicer.
+- Registration of volumes is also slow.
+
+** TODO FreeSurfer
+
+** TODO Elastix
+- Web: http://elastix.isi.uu.nl/
+- Open Source based on ITK.
+- Only command line.
+- Made to compare registration methods.
+
+** TODO ParaViewWeb
+- Web: http://www.paraview.org/Wiki/ParaViewWeb
+
 
 * Extras
 ** DONE New repository for papers
@@ -604,3 +739,9 @@ Yes, yes I can. [[http://cb.uu.se/~mariana][Here]].
    CLOSED: [2012-03-05 Mon 13:55]
 ** There is always more to learn about org mode!
 
+
+
+
+
+
+Chalmers: andrew mehnert
