@@ -614,7 +614,7 @@ Open source registration and segmentation toolkit.
        - Has useful pointers on how to handle DeformationField types.
     3. Visualizing Deformation Fields (469)
        - Uses ParaView to visualize 2D and 3D Deformation Fields. To visualize the field in Paraview:
-         1. Load the Deformation field (a .mha file in my case).
+         1. Open the Deformation field (a .mha file in my case).
          2. Click on apply.
          3. Use the "Glyph" filter with Arrows to show the field.
          4. Click on apply.
@@ -647,7 +647,7 @@ Open source registration and segmentation toolkit.
   - Tried just creating an image from the duplicate. There is a small problem with the types: I want the grayscale image to have float values, but the
     base volume has int values. A solution is to use floats always, but this makes a big difference in the LabelMap.
   - Tried using the ITK example to create an image based on vector magnitudes. But the filter I'm supposed to use is not included in the Slicer version.
-    (At least this is what I think). The example I tries is [[http://www.itk.org/Wiki/ITK/Examples/VectorImages/VectorMagnitudeImageFilter][here]].
+    (At least this is what I think). The example I tried is [[http://www.itk.org/Wiki/ITK/Examples/VectorImages/VectorMagnitudeImageFilter][here]].
   - Next idea: Find the maximum of the jacobian values and scale from 0 to 255. (measure * 255)/maxJac.
 
 + [2012-05-21 Mon]
@@ -665,10 +665,50 @@ Open source registration and segmentation toolkit.
 + [2012-05-29 Tue]
   - Meeting with Robin generated a TODO list:
 **** TODO Try obtaining a Grid transform and using it as a deformation field from BSpline deformable 
-**** TODO Try logarithm again but adding +1
-**** TODO Try the algorithm with other volumes. Begin with Meningioma1 and Meningioma2.
-**** TODO Do some experimenting to see which values of the Jacobian are more important and which can be ignored.
+     1. Case Meningioma 1 - 2 ::
+        - Doesn't seem to work. The DF is not detailed enough or incorrect.
+        - The resulting label map has only randomly positioned round blotches.
 
+     2. Case patient 1 ::
+        - Not useful at all, not even blotches. The Jacobians must not be in the range I'm considering.
+
+My conclusion :: I think the deformation field produced by BSpline deformable registration might not be meant to be used this way.
+***** DONE Visualize the BSpline deformation field (warp) with Paraview
+      CLOSED: [2012-05-30 Wed 17:29]
+- I did. I noticed nothing very interesting. There is general movement, but nothing specific enough I think.
+
+**** DONE Try Demons registration only with Demons in the 'Registration filter type'
+     CLOSED: [2012-05-31 Thu 14:55]
+     - The registration doesn't seem to be very good. Specially in the Meningioma case where 1 and 2 are misaligned.
+     - The result of Tensor morphometry is not better than with the default Diffeomorphic 'Registration filter type'.
+
+**** DONE Try logarithm again but adding +1
+     CLOSED: [2012-05-30 Wed 16:18]
+     - Tried log(abs(1 + jPxl)), this hangs Slicer. I guess a filter must be used.
+     - Tried Logarithm filter of (1 + JPxl), the result is still -nan.
+     - Tried Logarithm filter of abs(1 + jPxl) and (1 + abs(jPxl)), the result is still -nan.
+     - Tried log(1 + abs(jPxl)), this one works!!
+       I added a multiplication by -1 for the negatives after the "abs" to preserve signs. I'm not sure if it is necessary.
+       The resulting volume is basically the same as the LabelMap. But we might be able to extract more information out of it.
+
+**** TODO Try the algorithm with other volumes. Begin with Meningioma1 and Meningioma2.
+     1. Case Meningioma 1 - 2 ::
+        - This is the test case for ChangeTracker.
+        - This image seems to have centering issues with Slicer. They can be fixed by changing Image Origin to [0,0,0] in the Module 'Volumes'.
+          The Image Spacing is also weird ([0.935, 0.935, 1.400]). This one should not be changed.
+        - Interesting result, seems to work but the growth or shrinkage is not as obvious as I thought it would be.
+     2. Case joel_batch2/T1w_to_CBA/SKULL01
+        - This image is almost the same in both MRIs, the resulting DF should be pretty smooth.
+        - BRAINSDemons (Diffeomorphic) and default settings: Good registration but the DF is not very smooth.
+        - BRAINSDemons (Diffeomorphic) + Displacement field smoothing sigma 1.5: 
+
+        
+**** TODO Do some experimenting to see which values of the Jacobian are more important and which can be ignored.
+     - [2012-05-31 Thu]
+       - Added more colors to the expansion jacobian values, which are the ones that seem to have more values (from 1.1 until approx. 35 depending 
+         on the volume). I split them in differences of 5, I think I need to be more specific specially on the smaller values.
+       - Runtime is slower because of this. I should cosider it more.
+       - Added black label to the pixels that are close to no change. But it didn't make a big difference.
 
 * TODO Focus on Tensor-based Morphometry
 - Taking ChangeTracker as base we know that:
@@ -699,6 +739,7 @@ Open source registration and segmentation toolkit.
 
 ** TODO Read the book chapter about this found by Robin
 - Read some between [2012-05-23 Wed] and [2012-05-24 Thu]. Must continue reading and do a summary soon.
+- [2012-05-31 Thu] Started summary of the first part.
    
 
 * Other tools
