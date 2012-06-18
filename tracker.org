@@ -139,7 +139,7 @@ Three main things we need to do now (already in the TODO, but we defined an orde
 [[file:../thesis_papers/quantitative_comparison_of_algorithms_for_intersubject_registration.org][Summary]]
 
 ** Paper: A review of the automated detection of change in serial imaging studies of the brain
-[[file:../thesis_papers/a_review_of_the_automated_detection_of_chage_in_serial_imaging_studies_of_the_brain.org][Summary]
+[[file:../thesis_papers/a_review_of_the_automated_detection_of_chage_in_serial_imaging_studies_of_the_brain.org][Summary]]
 
 ** DONE Paper: Automatic detection and segmentation of evolving processes in 3D medical Images: Application to multiple sclerosis.
                     CLOSED: [2012-02-28 Tue 16:40]
