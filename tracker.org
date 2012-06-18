@@ -97,12 +97,12 @@ Current goals:
    CLOSED: [2012-04-23 Mon 16:01]
 Three main things we need to do now (already in the TODO, but we defined an order):
 1. [X] Learn ITK + write a program callable from Slicer.
-2. [ ] Find papers and read about Tensor based Morphometry.
+2. [X] Find papers and read about Tensor based Morphometry.
 3. [ ] Experiments with registration methods. After we know which method to use, since the registration approach depends on it.
 
 ** DONE Meeting with Robin [2012-05-08 Tue]
    CLOSED: [2012-05-08 Tue 15:21]
-- [ ] Robin found a nice chapter from book on Morphometry. Must read.
+- [X] Robin found a nice chapter from book on Morphometry. Must read.
 - [X] I will continue working on deformation fields in ITK. See what I can do with them, obtain their information.
 - [ ] Robin wrote to Joel about the summer job. He is at a conference, will probably answer mext week. 
 - Robin will help with reference letters.
@@ -121,9 +121,10 @@ Three main things we need to do now (already in the TODO, but we defined an orde
 
 ** DONE Meeting with Robin [2012-05-29 Tue]
    CLOSED: [2012-05-29 Tue 11:57]
-   - [ ] Try obtaining a Grid transform and using it as a deformation field from BSpline deformable registration.
-   - [ ] Try logarithm again but adding +1 
-   - [ ] Summary of morphometry chapter
+   - [X] Try obtaining a Grid transform and using it as a deformation field from BSpline deformable registration.
+     - Not very useful results.
+   - [X] Try logarithm again but adding +1 
+   - [X] Summary of morphometry chapter. See [[Chapter on morphometry][here]].
    - Robin is leaving soon to France. He'll be out all of June but we will maintain contact at least 2 times a week.
      
 
@@ -138,7 +139,7 @@ Three main things we need to do now (already in the TODO, but we defined an orde
 [[file:../thesis_papers/quantitative_comparison_of_algorithms_for_intersubject_registration.org][Summary]]
 
 ** Paper: A review of the automated detection of change in serial imaging studies of the brain
-[[file:../thesis_papers/a_review_of_the_automated_detection_of_chage_in_serial_imaging_studies_of_the_brain.org][Summary]]
+[[file:../thesis_papers/a_review_of_the_automated_detection_of_chage_in_serial_imaging_studies_of_the_brain.org][Summary]
 
 ** DONE Paper: Automatic detection and segmentation of evolving processes in 3D medical Images: Application to multiple sclerosis.
                     CLOSED: [2012-02-28 Tue 16:40]
@@ -147,7 +148,10 @@ Three main things we need to do now (already in the TODO, but we defined an orde
    CLOSED: [2012-02-27 Mon 15:41]
 [[quantify tumor progression][All about it in the Change Tracker section]]
 
-
+** DONE Chapter on morphometry
+   CLOSED: [2012-06-18 Mon 14:08]
+- [[file:../thesis_papers/chapter6_morphometry.org][Summary]]
+  
 * Slicer
 ** DONE Which methods allow the following:
   CLOSED: [2012-03-01 Thu 16:49]
@@ -565,7 +569,7 @@ Open source registration and segmentation toolkit.
 
   } // End of scope, interp is destroyed and the actual interpolator object reference count is decremented.
 #+END_SRC 
-- Event handling is implemented using thr Subject/Observer design pattern.
+- Event handling is implemented using the Subject/Observer design pattern.
 - Main types of data:
   1. Image:: n-dimensional, regular sampling of data.
   2. Mesh:: n-dimensional, unstructured grid. Topology defined by a set if cells with a type and connectivity list.
@@ -664,7 +668,8 @@ Open source registration and segmentation toolkit.
 
 + [2012-05-29 Tue]
   - Meeting with Robin generated a TODO list:
-**** TODO Try obtaining a Grid transform and using it as a deformation field from BSpline deformable 
+**** DONE Try obtaining a Grid transform and using it as a deformation field from BSpline deformable 
+     CLOSED: [2012-06-11 Mon 11:40]
      1. Case Meningioma 1 - 2 ::
         - Doesn't seem to work. The DF is not detailed enough or incorrect.
         - The resulting label map has only randomly positioned round blotches.
@@ -710,6 +715,9 @@ My conclusion :: I think the deformation field produced by BSpline deformable re
        - Runtime is slower because of this. I should cosider it more.
        - Added black label to the pixels that are close to no change. But it didn't make a big difference.
 
+*** TODO Modify parameters in DemonsRegistration 
+
+
 * TODO Focus on Tensor-based Morphometry
 - Taking ChangeTracker as base we know that:
   1. It uses BRAINSDemonWarp (DemonsRegistrationJacobianMetric).
@@ -737,11 +745,12 @@ My conclusion :: I think the deformation field produced by BSpline deformable re
     2. appears to handle this by adding ones to the diagonal elements of the Jacobian prior to taking the derivative.
   - I decided to use 2. for the module, since it's already included in ITK.
 
-** TODO Read the book chapter about this found by Robin
+** DONE Read the book chapter about this found by Robin
+   CLOSED: [2012-06-18 Mon 14:09]
 - Read some between [2012-05-23 Wed] and [2012-05-24 Thu]. Must continue reading and do a summary soon.
 - [2012-05-31 Thu] Started summary of the first part.
-   
-
+- See [[Chapter on morphometry][here]]. 
+  
 * Other tools
 ** TODO Do some experiments with FSL (The tool mentioned by Raili)
 Here is the [[http://www.fmrib.ox.ac.uk/fslcourse/][Link]]
