@@ -127,6 +127,13 @@ Three main things we need to do now (already in the TODO, but we defined an orde
    - [X] Summary of morphometry chapter. See [[Chapter on morphometry][here]].
    - Robin is leaving soon to France. He'll be out all of June but we will maintain contact at least 2 times a week.
      
+** TODO Robin email from [2012-06-19 Tue]
+- [ ] We should add a Voxel-Based morphomerty method to compare with the Tensor-Based one.
+      - [ ] Need a registration method.
+      - [ ] Measure of local intensity difference.
+- [ ] For our Tensor-based method we must:
+      - [ ] Do intensity normalization. See http://www.itk.org/SimpleITKDoxygen/html/classitk_1_1simple_1_1N4BiasFieldCorrectionImageFilter.html
+      - [ ] Try the registration method with smoothing after the normalization.
 
 * Papers and readings
 ** Registration lecture notes
@@ -718,6 +725,14 @@ My conclusion :: I think the deformation field produced by BSpline deformable re
 *** TODO Modify parameters in DemonsRegistration 
 
 
+** TODO Create a CLI to normalize intensities
+- [2012-06-21 Thu] Created a new module /IntensityNorm/ in the folder /Utils/ in the main module folder.
+*** TODO Make it compile!
+    - I need to be able to import the library /itkN4BiasFieldCorrectionImageFilter.h/ apparently only available in ITKv4. This means that I must
+      reconfigure and recompile my Slicer version to use ITKv4.
+    - There is an option on the configuration step before compilation.
+
+
 * TODO Focus on Tensor-based Morphometry
 - Taking ChangeTracker as base we know that:
   1. It uses BRAINSDemonWarp (DemonsRegistrationJacobianMetric).
@@ -745,12 +760,20 @@ My conclusion :: I think the deformation field produced by BSpline deformable re
     2. appears to handle this by adding ones to the diagonal elements of the Jacobian prior to taking the derivative.
   - I decided to use 2. for the module, since it's already included in ITK.
 
+*** TODO Read the nice articles about this on Wikipedia
+
+
 ** DONE Read the book chapter about this found by Robin
    CLOSED: [2012-06-18 Mon 14:09]
 - Read some between [2012-05-23 Wed] and [2012-05-24 Thu]. Must continue reading and do a summary soon.
 - [2012-05-31 Thu] Started summary of the first part.
-- See [[Chapter on morphometry][here]]. 
-  
+- See [[Chapter on morphometry][
+
+
+* TODO Create a Voxel-Based Morphometry method
+** TODO Find an appropriate registration method
+** TODO Find a measure of local intensity difference
+
 * Other tools
 ** TODO Do some experiments with FSL (The tool mentioned by Raili)
 Here is the [[http://www.fmrib.ox.ac.uk/fslcourse/][Link]]
