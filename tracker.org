@@ -646,7 +646,8 @@ Open source registration and segmentation toolkit.
   - The code comes mostly from ChangeTracker. Seems to work.
   - The code for the module is [[https://github.com/marianabb/slicer_modules/tree/master/MRIChangeDetector/Quantifiers/ITKTensor][here]].
            
-*** TODO Produce an image as output where the color/grayscale value is related to the Jacobian
+*** DONE Produce an image as output where the color/grayscale value is related to the Jacobian
+    CLOSED: [2012-06-19 Tue 17:15]
 + [2012-05-15 Tue]
   - Tried just creating an image from the duplicate. There is a small problem with the types: I want the grayscale image to have float values, but the
     base volume has int values. A solution is to use floats always, but this makes a big difference in the LabelMap.
@@ -708,7 +709,8 @@ My conclusion :: I think the deformation field produced by BSpline deformable re
         - BRAINSDemons (Diffeomorphic) + Displacement field smoothing sigma 1.5: 
 
         
-**** TODO Do some experimenting to see which values of the Jacobian are more important and which can be ignored.
+**** DONE Do some experimenting to see which values of the Jacobian are more important and which can be ignored.
+     CLOSED: [2012-06-19 Tue 17:15]
      - [2012-05-31 Thu]
        - Added more colors to the expansion jacobian values, which are the ones that seem to have more values (from 1.1 until approx. 35 depending 
          on the volume). I split them in differences of 5, I think I need to be more specific specially on the smaller values.
@@ -716,7 +718,7 @@ My conclusion :: I think the deformation field produced by BSpline deformable re
        - Added black label to the pixels that are close to no change. But it didn't make a big difference.
 
 *** TODO Modify parameters in DemonsRegistration 
-
+- Smoothing parameter. Seems to produce useful deformation fields with high values (around 2.5).
 
 * TODO Focus on Tensor-based Morphometry
 - Taking ChangeTracker as base we know that:
