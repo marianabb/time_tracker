@@ -127,13 +127,30 @@ Three main things we need to do now (already in the TODO, but we defined an orde
    - [X] Summary of morphometry chapter. See [[Chapter on morphometry][here]].
    - Robin is leaving soon to France. He'll be out all of June but we will maintain contact at least 2 times a week.
      
-** TODO Robin email from [2012-06-19 Tue]
-- [ ] We should add a Voxel-Based morphomerty method to compare with the Tensor-Based one.
-      - [ ] Need a registration method.
-      - [ ] Measure of local intensity difference.
-- [ ] For our Tensor-based method we must:
-      - [ ] Do intensity normalization. See http://www.itk.org/SimpleITKDoxygen/html/classitk_1_1simple_1_1N4BiasFieldCorrectionImageFilter.html
-      - [ ] Try the registration method with smoothing after the normalization.
+** DONE Robin email from [2012-06-19 Tue]
+   CLOSED: [2012-07-03 Tue 11:46]
+- [X] We should add a Voxel-Based morphometry method to compare with the Tensor-Based one.
+      - [X] Need a registration method. *Affine registration* seems to work ok.
+      - [X] Measure of local intensity difference. So far only substraction.
+- [X] For our Tensor-based method we must:
+      - [X] Do intensity normalization. See http://www.itk.org/SimpleITKDoxygen/html/classitk_1_1simple_1_1N4BiasFieldCorrectionImageFilter.html
+      - [X] Try the registration method with smoothing after the normalization.
+        - There doesn't seem to be a difference. Same axact results with and without normalization.
+
+** TODO Meeting with Raili and Robin [2012-07-03 Tue]
+   - I presented what we have done so far with voxel and tensor-based morphometry. I used two examples:
+     1. mod_patient1 :: A modified version of patient1 with added simple differences.
+     2. batch2_3 :: A patient that was operated and has some easier-to-see differences.
+   - We will focus on the voxel-based method for now because a Phd student will use it soon. The following suggestions
+     were made:
+     - [ ] Raili suggests changing the color of the subtraction result to red (or something bright) and place it over
+       the original image.
+     - [ ] Robin suggests having a LabelMap additional to the colored subtraction.
+     - [ ] The result-volume doesn't seem to be the right way to go. Eliminate it.
+     - [ ] There are issues when the subtraction result is negative. Create my own subtraction module that returns 
+     the *absolute value* of the subtraction.
+   - [ ] There will be another meeting with Raili on [2012-07-17 Tue]. Robin will probably not be present.
+     - [ ] I will prepare a laptop with Slicer + my module installed for Raili to test.
 
 * Papers and readings
 ** Registration lecture notes
@@ -600,6 +617,51 @@ Open source registration and segmentation toolkit.
     But it's easily fixable directly in Slicer, and I think the goal of this test is complete.
     I added the program to the git repository [[https://github.com/marianabb/slicer_modules/tree/master/MRIChangeDetector/Quantifiers/ITKTest][here]].
 
+
+
+* TODO Focus on Tensor-based Morphometry
+- Taking ChangeTracker as base we know that:
+  1. It uses BRAINSDemonWarp (DemonsRegistrationJacobianMetric).
+     - The output is a GridTransform which is supposed to be a Displacement Field (exactly what we want).
+     - The implementation of GridTransforms UI in Slicer is not complete. The backend should work according to [[http://slicer-devel.65872.n3.nabble.com/Grid-transforms-in-Slicer-4-td2426968.html][this]] forum thread.
+  2. It uses the Jacobian to calculate the amount of change and the volume of the changes.
+  3. It is currently not working in Slicer4. So we can't just use the code.
+
+** TODO Learn everything about the Jacobian
+- To apply a Jacobian filter on ITK:
+  1. itk::DeformationFieldJacobianDeterminantFilter :: Computes a scalar image from a vector image (e.g., deformation field) input, 
+       where each output scalar at each pixel is the Jacobian determinant of the "vector field" at that location.  
+       Computes the proper Jacobian Determinant for a vector field described this way as det[ dT/dx ] = det[ du/dx ].
+       In most cases deformation field mappings are represented as displacements from the current location so that an identity 
+       mapping is represented by an all zero vector field. In that more common case, one should use the DisplacementFieldJacobianDeterminantFilter.
+  2. itk::DisplacementFieldJacobianDeterminantFilter :: This calculation is correct in the case where the vector image is a "displacement" from 
+       the current location. The computation for the jacobian determinant is: det[ dT/dx ] = det[ I + du/dx ].
+  3. itk::WarpJacobianDeterminantFilter :: Not included in ITK. Part of the [[http://www-sop.inria.fr/asclepios/software/vtkINRIA3D/][vtkINRIA3D]] project. Computes a scalar image from a vector 
+     image (e.g., deformation field) input, where each output scalar at each pixel is the Jacobian determinant of the "warping" at that location.
+     Note that the determinant of a zero "vector field" is also zero, whereas the Jacobian determinant of the corresponding identity "warp transformation" is 1.0.
+  
+- Conclusions on this:       
+  - I am not entirely sure about the differences between 2. and 3. But from what I see in the documentation, they appear to be closely related. The problem
+    with the "vector fields" is that the determinant of a zero vector field is also zero, while the determinant of a zero "warp transform" is 1.0. But
+    2. appears to handle this by adding ones to the diagonal elements of the Jacobian prior to taking the derivative.
+  - I decided to use 2. for the module, since it's already included in ITK.
+
+*** TODO Read the nice articles about this on Wikipedia
+1. Determinant Article [[http://en.wikipedia.org/wiki/Determinant#Volume_and_Jacobian_determinant][here]]:
+   + The absolute value of the determinant of real vectors is equal to the volume of the parallelepiped spanned by those vectors.
+   + For a *differenciable function* (a function whose derivative exists at each point in its domain), the properties are also valid
+     when considering the *Jacobian matrix* of $f$. For: 
+     $f: R^n \rightarrow R^n$,
+     the Jacobian is the $nxn$ matrix whose entries are given by:
+     $D(f) = \left(\frac{\partial f_i}{\partial x_j}_{1\le i,j \le n} \right)$
+     
+
+** DONE Read the book chapter about this found by Robin
+   CLOSED: [2012-06-18 Mon 14:09]
+- Read some between [2012-05-23 Wed] and [2012-05-24 Thu]. Must continue reading and do a summary soon.
+- [2012-05-31 Thu] Started summary of the first part.
+- See [[Chapter on morphometry][
+
 ** TODO Experiment with displacement fields in ITK
 + [2012-04-26 Thu] 
   - Created a new ITK program (CLI) for Slicer: ITKTensor.
@@ -729,52 +791,34 @@ My conclusion :: I think the deformation field produced by BSpline deformable re
 
 ** TODO Create a CLI to normalize intensities
 - [2012-06-21 Thu] Created a new module /IntensityNorm/ in the folder /Utils/ in the main module folder.
-*** TODO Make it compile!
+*** DONE Make it compile!
+    CLOSED: [2012-06-28 Thu 20:36]
     - I need to be able to import the library /itkN4BiasFieldCorrectionImageFilter.h/ apparently only available in ITKv4. This means that I must
       reconfigure and recompile my Slicer version to use ITKv4.
     - There is an option on the configuration step before compilation.
+    - [2012-06-28 Thu] Recompiled with ITKv4 in the options. Had a few problems, see [[http://slicer-devel.65872.n3.nabble.com/EXTENSION-WC-TYPE-is-empty-error-td4025270.html][this error]].
+      - The library is successfully imported.
+      - Random Slicer detail of the day: In a CLI, the variable name *inputVolume* is taken, /DO NOT USE/.
 
+*** DONE Test the module. Make it work!
+    CLOSED: [2012-06-29 Fri 20:54]
+    - [2012-06-29 Fri] It works if the types of the input and output images are *float*.
+    - It /looks/ like it works, but there is no difference in the resulting registration when using demons.
 
-* TODO Focus on Tensor-based Morphometry
-- Taking ChangeTracker as base we know that:
-  1. It uses BRAINSDemonWarp (DemonsRegistrationJacobianMetric).
-     - The output is a GridTransform which is supposed to be a Displacement Field (exactly what we want).
-     - The implementation of GridTransforms UI in Slicer is not complete. The backend should work according to [[http://slicer-devel.65872.n3.nabble.com/Grid-transforms-in-Slicer-4-td2426968.html][this]] forum thread.
-  2. It uses the Jacobian to calculate the amount of change and the volume of the changes.
-  3. It is currently not working in Slicer4. So we can't just use the code.
+*** TODO Same results. More tests?
 
-** TODO Learn everything about the Jacobian
-- To apply a Jacobian filter on ITK:
-  1. itk::DeformationFieldJacobianDeterminantFilter :: Computes a scalar image from a vector image (e.g., deformation field) input, 
-       where each output scalar at each pixel is the Jacobian determinant of the "vector field" at that location.  
-       Computes the proper Jacobian Determinant for a vector field described this way as det[ dT/dx ] = det[ du/dx ].
-       In most cases deformation field mappings are represented as displacements from the current location so that an identity 
-       mapping is represented by an all zero vector field. In that more common case, one should use the DisplacementFieldJacobianDeterminantFilter.
-  2. itk::DisplacementFieldJacobianDeterminantFilter :: This calculation is correct in the case where the vector image is a "displacement" from 
-       the current location. The computation for the jacobian determinant is: det[ dT/dx ] = det[ I + du/dx ].
-  3. itk::WarpJacobianDeterminantFilter :: Not included in ITK. Part of the [[http://www-sop.inria.fr/asclepios/software/vtkINRIA3D/][vtkINRIA3D]] project. Computes a scalar image from a vector 
-     image (e.g., deformation field) input, where each output scalar at each pixel is the Jacobian determinant of the "warping" at that location.
-     Note that the determinant of a zero "vector field" is also zero, whereas the Jacobian determinant of the corresponding identity "warp transformation" is 1.0.
-  
-- Conclusions on this:       
-  - I am not entirely sure about the differences between 2. and 3. But from what I see in the documentation, they appear to be closely related. The problem
-    with the "vector fields" is that the determinant of a zero vector field is also zero, while the determinant of a zero "warp transform" is 1.0. But
-    2. appears to handle this by adding ones to the diagonal elements of the Jacobian prior to taking the derivative.
-  - I decided to use 2. for the module, since it's already included in ITK.
-
-*** TODO Read the nice articles about this on Wikipedia
-
-
-** DONE Read the book chapter about this found by Robin
-   CLOSED: [2012-06-18 Mon 14:09]
-- Read some between [2012-05-23 Wed] and [2012-05-24 Thu]. Must continue reading and do a summary soon.
-- [2012-05-31 Thu] Started summary of the first part.
-- See [[Chapter on morphometry][
-
-
-* TODO Create a Voxel-Based Morphometry method
-** TODO Find an appropriate registration method
+* TODO Voxel-Based Morphometry method
+** DONE Find an appropriate registration method
+   CLOSED: [2012-07-03 Tue 12:01]
+Affine registration seems to be a good default.
 ** TODO Find a measure of local intensity difference
+So far only subtraction.   
+*** TODO There are issues when the subtraction result is negative. 
+- Create my own subtraction module that returns the *absolute value* of the subtraction.
+** TODO Eliminate the result-volume
+** TODO Change the color of the subtraction result to something bright
+** TODO Add a LabelMap additional to the colored subtraction
+** TODO Prepare a laptop for Raili for the meeting of [2012-07-17 Tue]
 
 * Other tools
 ** TODO Do some experiments with FSL (The tool mentioned by Raili)
