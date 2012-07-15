@@ -811,6 +811,7 @@ My conclusion :: I think the deformation field produced by BSpline deformable re
 ** DONE Find an appropriate registration method
    CLOSED: [2012-07-03 Tue 12:01]
 Affine registration seems to be a good default.
+** TODO Add Affine registration to the options and to be the default method.
 ** TODO Find a measure of local intensity difference
 So far only subtraction.   
 *** TODO There are issues when the subtraction result is negative. 
@@ -819,6 +820,8 @@ So far only subtraction.
 ** TODO Change the color of the subtraction result to something bright
 ** TODO Add a LabelMap additional to the colored subtraction
 ** TODO Prepare a laptop for Raili for the meeting of [2012-07-17 Tue]
+
+
 
 * Other tools
 ** TODO Do some experiments with FSL (The tool mentioned by Raili)
