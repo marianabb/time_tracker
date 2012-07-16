@@ -143,11 +143,12 @@ Three main things we need to do now (already in the TODO, but we defined an orde
      2. batch2_3 :: A patient that was operated and has some easier-to-see differences.
    - We will focus on the voxel-based method for now because a Phd student will use it soon. The following suggestions
      were made:
-     - [ ] Raili suggests changing the color of the subtraction result to red (or something bright) and place it over
+     - [X] Raili suggests changing the color of the subtraction result to red (or something bright) and place it over
        the original image.
-     - [ ] Robin suggests having a LabelMap additional to the colored subtraction.
-     - [ ] The result-volume doesn't seem to be the right way to go. Eliminate it.
-     - [ ] There are issues when the subtraction result is negative. Create my own subtraction module that returns 
+     - [X] Robin suggests having a LabelMap additional to the colored subtraction.
+       - I decided to just leave the LabelMap since it's easier to handle and they both offer the same information.
+     - [X] The result-volume doesn't seem to be the right way to go. Eliminate it.
+     - [X] There are issues when the subtraction result is negative. Create my own subtraction module that returns 
      the *absolute value* of the subtraction.
    - [ ] There will be another meeting with Raili on [2012-07-17 Tue]. Robin will probably not be present.
      - [ ] I will prepare a laptop with Slicer + my module installed for Raili to test.
@@ -811,16 +812,32 @@ My conclusion :: I think the deformation field produced by BSpline deformable re
 ** DONE Find an appropriate registration method
    CLOSED: [2012-07-03 Tue 12:01]
 Affine registration seems to be a good default.
-** TODO Add Affine registration to the options and to be the default method.
+** DONE Add Affine registration to the options and to be the default method.
+   CLOSED: [2012-07-16 Mon 00:12]
 ** TODO Find a measure of local intensity difference
-So far only subtraction.   
-*** TODO There are issues when the subtraction result is negative. 
+So far only the absolute value of the subtraction.   
+*** DONE There are issues when the subtraction result is negative. 
+    CLOSED: [2012-07-16 Mon 15:01]
 - Create my own subtraction module that returns the *absolute value* of the subtraction.
-** TODO Eliminate the result-volume
-** TODO Change the color of the subtraction result to something bright
-** TODO Add a LabelMap additional to the colored subtraction
+  - CLI Module created instead of ITKTest. It is now called ITKSubtractor.
+** DONE Eliminate the result-volume
+   CLOSED: [2012-07-16 Mon 00:12]
+** DONE Change the color of the subtraction result to something bright
+   CLOSED: [2012-07-16 Mon 00:12]
+** DONE Subtraction with negative values AND create LabelMap!
+   CLOSED: [2012-07-16 Mon 14:31]
+Used a CLI module written by me with the itk filter /AbsoluteValueDifferenceImageFilter/.
+** DONE Delete the threshold or do something with it
+   CLOSED: [2012-07-16 Mon 14:57]
+Just commented the part in case we need it later.
+** DONE Maybe comment some of the registration methods available
+   CLOSED: [2012-07-16 Mon 14:38]
+- Commented out Fiducial registration.
+- Ordered the methods in order of 'powerfullness'
+** TODO Quitting crashes! Why?!.
 ** TODO Prepare a laptop for Raili for the meeting of [2012-07-17 Tue]
-
+- Might take more time that I expected since I have to compile Slicer version 4 (with ITKv4) on a linux machine and currently the only
+  one available to me is /troubadix/ in the department which is VERY slow.
 
 
 * Other tools
