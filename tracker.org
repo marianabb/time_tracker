@@ -134,10 +134,11 @@ Three main things we need to do now (already in the TODO, but we defined an orde
       - [X] Measure of local intensity difference. So far only substraction.
 - [X] For our Tensor-based method we must:
       - [X] Do intensity normalization. See http://www.itk.org/SimpleITKDoxygen/html/classitk_1_1simple_1_1N4BiasFieldCorrectionImageFilter.html
-      - [X] Try the registration method with smoothing after the normalization.
-        - There doesn't seem to be a difference. Same axact results with and without normalization.
+        - There doesn't seem to be a difference. Same exact results with and without normalization.
+      - [ ] Try the registration method with smoothing after the normalization.
 
-** TODO Meeting with Raili and Robin [2012-07-03 Tue]
+** DONE Meeting with Raili and Robin [2012-07-03 Tue]
+   CLOSED: [2012-07-03 Tue 14:14]
    - I presented what we have done so far with voxel and tensor-based morphometry. I used two examples:
      1. mod_patient1 :: A modified version of patient1 with added simple differences.
      2. batch2_3 :: A patient that was operated and has some easier-to-see differences.
@@ -150,8 +151,19 @@ Three main things we need to do now (already in the TODO, but we defined an orde
      - [X] The result-volume doesn't seem to be the right way to go. Eliminate it.
      - [X] There are issues when the subtraction result is negative. Create my own subtraction module that returns 
      the *absolute value* of the subtraction.
-   - [ ] There will be another meeting with Raili on [2012-07-17 Tue]. Robin will probably not be present.
-     - [ ] I will prepare a laptop with Slicer + my module installed for Raili to test.
+   - [X] There will be another meeting with Raili on [2012-07-17 Tue]. Robin will probably not be present.
+     - [X] I will prepare a laptop with Slicer + my module installed for Raili to test.
+       - Not possible due to vacations. But I'll do the analysis myself and report to Raili.
+
+** DONE Meeting with Raili [2012-07-17 Tue]
+   CLOSED: [2012-07-17 Tue 17:15]
+   - The laptop is not ready because I don't have the admin password.
+   - [X] Raili gave me the MRIs of 18 patients to test the voxel based method.
+** TODO Meeting with Robin [2012-07-31 Tue]
+   - [X] Make a skeleton of what I'm going to write on the book. See [[Skeleton]].
+   - [ ] Add amount of volume changed to Voxel-based method.
+   - [ ] Wrap up Tensor-based method. Jacobiant matrix or Jacobian determinant? Registration after smoothing?
+   - [ ] Plan and do the experiments.
 
 * Papers and readings
 ** Registration lecture notes
@@ -620,7 +632,7 @@ Open source registration and segmentation toolkit.
 
 
 
-* TODO Focus on Tensor-based Morphometry
+* TODO Tensor-based Morphometry method
 - Taking ChangeTracker as base we know that:
   1. It uses BRAINSDemonWarp (DemonsRegistrationJacobianMetric).
      - The output is a GridTransform which is supposed to be a Displacement Field (exactly what we want).
@@ -814,7 +826,8 @@ My conclusion :: I think the deformation field produced by BSpline deformable re
 Affine registration seems to be a good default.
 ** DONE Add Affine registration to the options and to be the default method.
    CLOSED: [2012-07-16 Mon 00:12]
-** TODO Find a measure of local intensity difference
+** DONE Find a measure of local intensity difference
+   CLOSED: [2012-07-31 Tue 13:28]
 So far only the absolute value of the subtraction.   
 *** DONE There are issues when the subtraction result is negative. 
     CLOSED: [2012-07-16 Mon 15:01]
@@ -835,11 +848,105 @@ Just commented the part in case we need it later.
 - Commented out Fiducial registration.
 - Ordered the methods in order of 'powerfullness'
 ** TODO Quitting crashes! Why?!.
-** TODO Prepare a laptop for Raili for the meeting of [2012-07-17 Tue]
+- It is something in my module. Not surprisingly, it also happens with ChangeTracker. I guess I imported the error.
+- It happens after I load volumes into the baseline and followup in the SelectVolumes step. Either by using the 'load tests' button or manually.
+
+** DONE Prepare a laptop for Raili for the meeting of [2012-07-17 Tue]
+   CLOSED: [2012-07-22 Sun 00:22]
 - Might take more time that I expected since I have to compile Slicer version 4 (with ITKv4) on a linux machine and currently the only
   one available to me is /troubadix/ in the department which is VERY slow.
+- [2012-07-17 Tue] I have the laptop 11. Windows 7, with no admin permissions which does not allow me to install anything. I wrote an email to Fredrik Nysjö, 
+  Olle and Lennart.
+- Cancelled due to vacation. We decided that I'll analyse 18 patients myself.
+** DONE Analyse the 18 patients Raili gave me before August 8th.
+   CLOSED: [2012-07-30 Mon 13:29]
+- [2012-07-20 Fri] I made an awesome script to prepare the MRI images.
+- CG :: Affine registration works.
+        Can't see anything worth reporting.
+- CL :: Affine registration doesn't produce a very good result. As a consequence, the differences seem to be more than what I believe
+        they are. BSpline registration is no better.
+        Demon registration produces a very good registration, but I can see a small diference in the top right part of the brain.
+        Took screenshots.
+- CS :: Affine registration changes the volume's dimensions in two of the orientations. Not a very useful result.
+        BSpline registration produces a sligthtly better result (no dimension change), but still not a very good registration, which
+        turns out on a bright (and probably not trustable) labelMap.
+        Affine registration with different order seems to work. Can't see anything worth reporting.
+- HK :: I think is neck guy! The MRIs are very well aligned.
+        Affine registration shows a thin line of difference in the Corpus Callosum. Added a screenshot just in case.
+- JN :: Pretty good initial positions.
+        Affine registration: Not many differences, maybe a small line on the back of the brain. Added screenshot just in case.
+- JO :: Affine registration looks fine.
+        Can't see anything worth reporting.
+- JS :: Affine registration works.
+        Can't see anything worth reporting.
+- KM :: The 2nd MRI is rotated, not a very usual problem so far. Affine transformation doesn't completely fix this.
+        Produces a 'ghost' of everything in the LabelMap, so it's quite hard to see real differences.
+        BSpline registration produces a better result, but still is hard to differenciate the real differences from the
+        registration issues.
+- KS :: Affine registration works.
+        Can't see anything worth reporting.
+- ME :: Affine regiatration looks fine.
+        Can't see anything worth reporting.
+- MLe :: Affine registration works. There are numbers on the forehead of the patient.
+         Can't see anything worth reporting.
+- MLu :: Quite a different patient position between both exams.
+         Affine registration has ghosts because of imperfect result. Can't know which ones are real differences.
+         BSpline registration gives a terrible result.
+- MT :: Affine registration works.
+        Sort of brigther that usual for a good affine registration, but can't see anything worth reporting.
+- NN :: Affine registration works.
+        Can't see anything worth reporting.
+- PB :: Affine registration looks fine. Very small possible difference. Took screenshot.
+        Demon registration doesn't show the small difference.
+- SB :: Terrible first MRI. The patients nose is outside the image.
+        Affine registration is not enough.
+        BSpline registration is not enough.
+        Demon registration produces a very good result as usual, but not many differences. I took a screenshot.
+- SI :: Second MRI with part of the patient outside the image.
+        Affine registration 'squishes' the resulting image in 2 dimensions. Affine registration with MRI2 as fixed volume works much
+        better. The final LabelMap, although pinkinsh, shows no small differences.
+        BSpline registration is not enough. In both orders.
+        Demon registration produces some bright lines. I don't think they are real differences.
+- SS :: The angle is very different between both MRIs.
+        Affine registration is not enough.
+        BSpline registration is not enough.
+        Demons registration produces no differences in the LabelMap.
+- [2012-07-30 Mon] Sent my results to Raili.
+        
+
+        
+        
 
 
+  
+* Thesis Book
+** Skeleton
+   1. Introduction
+      - Problem
+      - Importance of the problem
+      - Other works (in passing)
+   2. Methods
+      2.1. Registration
+      2.1.1. Affine registration
+      2.1.2. BSpline registration
+      2.1.3. BRAINS Demon warp registration 
+      2.2. Morphometry
+      2.2.1. Voxel-based morphometry
+      2.2.2. Tensor-based morphometry
+      2.2.3. Deformation-based morphometry (Maybe)
+   3. Proposed solutions
+      3.1 Tools used
+      3.1.1. 3DSlicer
+      3.1.2. ITK
+      3.1.3. Other tools
+      3.2. Voxel-based method
+      3.3. Tensor-based method
+      3.4. Comparison to other methods (which? think about this)
+   4. Experiments
+      4.1. Voxel-based results
+      4.2. Tensor-based results
+   5. Conclusions and future works
+      
 * Other tools
 ** TODO Do some experiments with FSL (The tool mentioned by Raili)
 Here is the [[http://www.fmrib.ox.ac.uk/fslcourse/][Link]]
