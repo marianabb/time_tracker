@@ -98,7 +98,7 @@ Current goals:
 Three main things we need to do now (already in the TODO, but we defined an order):
 1. [X] Learn ITK + write a program callable from Slicer.
 2. [X] Find papers and read about Tensor based Morphometry.
-3. [ ] Experiments with registration methods. After we know which method to use, since the registration approach depends on it.
+3. [X] Experiments with registration methods. After we know which method to use, since the registration approach depends on it.
 
 ** DONE Meeting with Robin [2012-05-08 Tue]
    CLOSED: [2012-05-08 Tue 15:21]
@@ -162,7 +162,7 @@ Three main things we need to do now (already in the TODO, but we defined an orde
 ** TODO Meeting with Robin [2012-07-31 Tue]
    - [X] Make a skeleton of what I'm going to write on the book. See [[Skeleton]].
    - [ ] Add amount of volume changed to Voxel-based method.
-   - [ ] Wrap up Tensor-based method. Jacobiant matrix or Jacobian determinant? Registration after smoothing?
+   - [X] Wrap up Tensor-based method. Jacobiant matrix or Jacobian determinant? Registration after smoothing?
 ** TODO Meeting with Robin [2012-08-27 Mon]
    - [ ] Plan and do the experiments.
      - Use one of the MRIs from Joel as "unchanging".
@@ -170,15 +170,23 @@ Three main things we need to do now (already in the TODO, but we defined an orde
        - Modifications must be black parts or making some part bigger. 
        - Try with modifications of different sizes.
      - Tensor based method can have a few changeable variables:
-       - Displacement field smoothing sigma.
-       - Percentage of the Jacobian to use (20%, 30%).
-   - [ ] Apply log to the Jacobian before extracting the percentage to use.
-   - [ ] Try FEMRegistration but only if it works fast.
-
-** TODO Meeting with Raili and Robin [2012-08-28 Tue]
+       + [X] Displacement field smoothing sigma.
+         - 2.5 is still a good number. Results with 1.0 or 1.5 usually give deformations fields not smooth enough.
+       + [X] Percentage of the Jacobian to use (20%, 30%).
+         - Different for high and low values: High = 22.5%, Low = 30%. Since there are much more high values.
+   - [X] Apply log to the Jacobian before extracting the percentage to use.
+   - [X] Try FEMRegistration but only if it works fast.
+     - It didn't. Maybe will try it later.
+** DONE Meeting with Raili and Robin [2012-08-28 Tue]
+   CLOSED: [2012-09-17 Mon 23:08]
    - Suggestions for the experiments.
-   - [ ] Prepare a few GOOD images for the paper. Focus on the patients CL and PB.
-
+   - [X] Prepare a few GOOD images for the paper. Focus on the patients CL and PB.
+     - Sent an email with a Dropbox link. 
+     - PB's differences are too small.
+** TODO Meeting with Robin [2012-09-14 Fri]
+   - Suggestions to create the "artificial" tests.
+   - [ ] Is there a way to count the size of the volume changes detected by the tensor method?
+     - Maybe something with growth segmentation directly in Slicer. Initial tests not very successful.
 
 * Papers and readings
 ** Registration lecture notes
@@ -1022,9 +1030,12 @@ after having reviewed the patients without computerized help.
 
 
 ** Experiments
-- MRIs with no changes
-- Small added changes (darker spots)
-  - 
+- Use one (or two) of Joel's MRIs with no changes (find one with no easy-detectable differences).
+   - Add differences of changing sizes. I am still not sure how to add the differences, last time I used Gimp and did it manually, perhaps Matlab might be a better idea.
+   - At least 3 different sizes of differences.  The smallest ones should be pretty small, just to try.
+- Take two or three MRIs with known differences and compare the voxel-based with the tensor-based method. See if they find different results.
+   - The ones suggested by Raili for the paper (CL and PB).
+   - The one we usually use because it has big differences (batch2_3).
 
 
 * Other tools
